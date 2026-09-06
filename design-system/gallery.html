@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahara · Design System v1.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+Devanagari:wght@400;600&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     SAHARA DESIGN TOKENS (mirror of tokens.css · v1.0)
+     ============================================================ */
+  :root {
+    --color-sand-50:  #FAF6EF;
+    --color-sand-100: #F4EDE1;
+    --color-sand-200: #E9DFCE;
+    --color-sand-300: #D8C9B0;
+    --color-sand-400: #C2B096;
+
+    --color-ink-900: #1F2733;
+    --color-ink-700: #3A4350;
+    --color-ink-500: #66707C;
+    --color-ink-300: #98A0AA;
+    --color-ink-100: #D5DAE0;
+
+    --color-marigold-50:  #FBF3EC;
+    --color-marigold-100: #F6E2D2;
+    --color-marigold-200: #EDC5A5;
+    --color-marigold-300: #E0A276;
+    --color-marigold-400: #D17F4E;
+    --color-marigold-500: #B85C33;
+    --color-marigold-600: #9E4A26;
+    --color-marigold-700: #823C20;
+    --color-marigold-800: #652F1A;
+    --color-marigold-900: #472112;
+
+    --color-sage-50:  #F1F5EE;
+    --color-sage-100: #E0E9DA;
+    --color-sage-200: #C3D3B7;
+    --color-sage-300: #A0B890;
+    --color-sage-400: #7E9D6C;
+    --color-sage-500: #648552;
+    --color-sage-600: #4E6A40;
+    --color-sage-700: #3F5634;
+    --color-sage-800: #32442A;
+    --color-sage-900: #25311F;
+
+    --color-amber-50:  #FCF6E8;
+    --color-amber-100: #F7E8C6;
+    --color-amber-200: #EDD291;
+    --color-amber-300: #E0B75E;
+    --color-amber-400: #CF9A35;
+    --color-amber-500: #B37D22;
+    --color-amber-600: #93641A;
+    --color-amber-700: #754F15;
+    --color-amber-800: #5A3D12;
+
+    --color-critical-50:  #FBEFEC;
+    --color-critical-100: #F4DAD3;
+    --color-critical-200: #E6B3A5;
+    --color-critical-300: #D18770;
+    --color-critical-400: #B85F45;
+    --color-critical-500: #A0452D;
+    --color-critical-600: #863723;
+    --color-critical-700: #6B2C1C;
+
+    --color-white: #FFFFFF;
+
+    --font-display: "Fraunces", "Noto Serif Devanagari", Georgia, "Times New Roman", serif;
+    --font-sans:    "Inter", "Noto Sans Devanagari", system-ui, "Segoe UI", sans-serif;
+    --font-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+    --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
+    --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem;
+    --space-12: 3rem; --space-16: 4rem; --space-20: 5rem; --space-24: 6rem; --space-32: 8rem;
+
+    --radius-sm: 6px; --radius-md: 8px; --radius-lg: 12px; --radius-xl: 16px;
+    --radius-2xl: 24px; --radius-full: 9999px;
+
+    --shadow-1: 0 1px 2px rgba(31, 39, 51, 0.05);
+    --shadow-2: 0 1px 2px rgba(31, 39, 51, 0.06), 0 2px 6px rgba(31, 39, 51, 0.05);
+    --shadow-3: 0 2px 4px rgba(31, 39, 51, 0.05), 0 8px 20px -4px rgba(31, 39, 51, 0.10);
+    --shadow-4: 0 4px 8px rgba(31, 39, 51, 0.06), 0 16px 36px -8px rgba(31, 39, 51, 0.14);
+    --shadow-5: 0 8px 16px rgba(31, 39, 51, 0.08), 0 28px 64px -12px rgba(31, 39, 51, 0.20);
+
+    --dur-micro: 100ms; --dur-fast: 160ms; --dur-base: 240ms; --dur-slow: 360ms; --dur-slower: 560ms;
+    --ease-gentle: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-soft: cubic-bezier(0.45, 0, 0.25, 1);
+    --ease-calm: cubic-bezier(0.83, 0, 0.17, 1);
+  }
+
+  /* ============ base ============ */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--color-sand-50);
+    color: var(--color-ink-900);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--color-marigold-100); color: var(--color-ink-900); }
+  :focus-visible { outline: 2px solid var(--color-marigold-600); outline-offset: 2px; }
+
+  .page { max-width: 76rem; margin: 0 auto; padding: 0 2rem; }
+  section { padding: 6rem 0; border-top: 1px solid var(--color-sand-200); }
+  .eyebrow {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--color-marigold-600); margin-bottom: var(--space-3);
+  }
+  .h2 { font-family: var(--font-display); font-size: 2rem; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; }
+  .lead { font-size: 1.125rem; line-height: 1.7; color: var(--color-ink-700); max-width: 46rem; margin-top: var(--space-3); }
+  .spec { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-ink-500); }
+
+  /* ============ masthead ============ */
+  .masthead {
+    position: relative; overflow: hidden; padding: 6.5rem 0 5rem;
+    background:
+      radial-gradient(52rem 26rem at 78% -6rem, rgba(246, 226, 210, 0.55), transparent 70%),
+      radial-gradient(40rem 22rem at -8% 110%, rgba(224, 233, 218, 0.5), transparent 70%),
+      var(--color-sand-50);
+  }
+  .arch-mark { display: block; margin-bottom: 2rem; }
+  .wordmark {
+    font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; color: var(--color-ink-900);
+    letter-spacing: 0.01em;
+  }
+  .wordmark .dev { font-family: "Noto Serif Devanagari", serif; font-weight: 600; color: var(--color-marigold-600); }
+  .masthead h1 {
+    font-family: var(--font-display); font-size: 3.5rem; font-weight: 500; line-height: 1.04;
+    letter-spacing: -0.02em; max-width: 22ch; margin-top: 1.5rem;
+  }
+  .masthead h1 em { font-style: normal; color: var(--color-marigold-600); }
+  .masthead .lead { margin-top: 1.5rem; }
+  .mast-actions { display: flex; gap: var(--space-3); margin-top: 2.5rem; flex-wrap: wrap; }
+  .meta-row { display: flex; gap: 2.5rem; margin-top: 3.5rem; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; gap: 0.25rem; }
+  .meta-item .spec { text-transform: uppercase; letter-spacing: 0.08em; }
+  .meta-item b { font-family: var(--font-mono); font-weight: 500; font-size: 0.875rem; color: var(--color-ink-900); }
+
+  /* ============ buttons ============ */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    font-family: var(--font-sans); font-size: 0.9375rem; font-weight: 500;
+    border-radius: var(--radius-md); padding: 0.75rem 1.5rem; min-height: 44px;
+    border: 1px solid transparent; cursor: pointer; text-decoration: none;
+    transition: background-color var(--dur-fast) var(--ease-soft), border-color var(--dur-fast) var(--ease-soft),
+                color var(--dur-fast) var(--ease-soft), transform var(--dur-base) var(--ease-gentle),
+                box-shadow var(--dur-base) var(--ease-gentle);
+  }
+  .btn-primary { background: var(--color-marigold-600); color: #fff; }
+  .btn-primary:hover { background: var(--color-marigold-700); }
+  .btn-primary:active { background: var(--color-marigold-800); }
+  .btn-secondary { background: var(--color-white); border-color: var(--color-sand-300); color: var(--color-ink-900); }
+  .btn-secondary:hover { border-color: var(--color-ink-300); background: var(--color-sand-100); }
+  .btn-ghost { background: transparent; color: var(--color-ink-900); }
+  .btn-ghost:hover { background: var(--color-sand-100); }
+  .btn-danger { background: var(--color-critical-600); color: #fff; }
+  .btn-danger:hover { background: var(--color-critical-700); }
+  .btn[disabled] { background: var(--color-sand-200); color: var(--color-ink-300); cursor: not-allowed; }
+  .btn .spinner {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.35); border-top-color: #fff;
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .btn-group { display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; }
+
+  /* ============ badges ============ */
+  .badge {
+    display: inline-flex; align-items: center; gap: 0.375rem;
+    font-size: 0.8125rem; font-weight: 500; line-height: 1.4;
+    padding: 0.25rem 0.75rem; border-radius: var(--radius-full);
+    border: 1px solid transparent;
+  }
+  .badge .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .badge-neutral { background: var(--color-sand-100); color: var(--color-ink-700); border-color: var(--color-sand-200); }
+  .badge-sage { background: var(--color-sage-50); color: var(--color-sage-600); border-color: var(--color-sage-200); }
+  .badge-amber { background: var(--color-amber-50); color: var(--color-amber-600); border-color: var(--color-amber-200); }
+  .badge-critical { background: var(--color-critical-50); color: var(--color-critical-600); border-color: var(--color-critical-200); }
+
+  /* ============ swatches ============ */
+  .scale { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-4); }
+  .swatch { border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--color-sand-200); background: var(--color-white); }
+  .swatch .chip { height: 64px; }
+  .swatch .info { padding: 0.625rem 0.75rem; }
+  .swatch .info b { display: block; font-size: 0.8125rem; font-weight: 600; color: var(--color-ink-900); }
+  .swatch .info span { font-family: var(--font-mono); font-size: 0.6875rem; color: var(--color-ink-500); }
+  .scale-title { font-size: 0.8125rem; font-weight: 600; color: var(--color-ink-700); margin: 2rem 0 0.75rem; display: flex; align-items: baseline; gap: 0.75rem; }
+  .scale-title .spec { font-weight: 400; }
+
+  /* ============ type specimens ============ */
+  .type-row { padding: 1.25rem 0; border-bottom: 1px solid var(--color-sand-200); display: grid; grid-template-columns: 180px 1fr; gap: 1.5rem; align-items: baseline; }
+  .type-row .label { font-size: 0.8125rem; color: var(--color-ink-500); }
+  .type-row .label b { display: block; font-weight: 600; color: var(--color-ink-700); }
+  .type-row .sample { color: var(--color-ink-900); min-width: 0; overflow-wrap: break-word; }
+  .t-display { font-family: var(--font-display); font-size: 3.5rem; font-weight: 500; line-height: 1.04; letter-spacing: -0.02em; }
+  .t-h1 { font-family: var(--font-display); font-size: 2.5rem; font-weight: 500; line-height: 1.08; letter-spacing: -0.015em; }
+  .t-h2 { font-family: var(--font-display); font-size: 2rem; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; }
+  .t-h3 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; line-height: 1.25; }
+  .t-h4 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; line-height: 1.3; }
+  .t-body-lg { font-size: 1.125rem; line-height: 1.7; }
+  .t-body { font-size: 1rem; line-height: 1.65; }
+  .t-small { font-size: 0.875rem; line-height: 1.55; }
+  .t-caption { font-size: 0.8125rem; line-height: 1.45; font-weight: 500; }
+  .t-eyebrow { font-size: 0.75rem; line-height: 1.4; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+  .t-data { font-family: var(--font-mono); font-size: 0.875rem; line-height: 1.5; font-weight: 500; }
+  .t-display em, .t-h1 em, .t-h2 em { font-style: normal; color: var(--color-marigold-600); }
+
+  .hi-block {
+    background: var(--color-white); border: 1px solid var(--color-sand-200); border-radius: var(--radius-xl);
+    padding: 2.5rem; margin-top: 2rem; position: relative; overflow: hidden;
+  }
+  .hi-block .hi-headline {
+    font-family: var(--font-display); font-size: 2.5rem; font-weight: 600; line-height: 1.3;
+    letter-spacing: 0; color: var(--color-ink-900);
+  }
+  .hi-block p { font-size: 1rem; line-height: 1.75; color: var(--color-ink-700); margin-top: 0.75rem; }
+  .hi-flag {
+    position: absolute; top: 1rem; right: 1rem; font-family: var(--font-mono); font-size: 0.6875rem;
+    color: var(--color-ink-500); letter-spacing: 0.08em; text-transform: uppercase;
+  }
+
+  /* ============ cards ============ */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-6); }
+  .card {
+    background: var(--color-white); border: 1px solid var(--color-sand-200); border-radius: var(--radius-xl);
+    padding: 1.5rem; box-shadow: var(--shadow-1);
+    transition: transform var(--dur-base) var(--ease-gentle), box-shadow var(--dur-base) var(--ease-gentle);
+  }
+  .card.hoverable:hover { transform: translateY(-3px); box-shadow: var(--shadow-3); }
+  .card h4 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; line-height: 1.3; margin-bottom: 0.5rem; }
+  .card p { font-size: 0.9375rem; color: var(--color-ink-700); }
+  .stat-card { display: flex; flex-direction: column; gap: 0.75rem; }
+  .stat-card .num { font-family: var(--font-mono); font-size: 2rem; font-weight: 500; color: var(--color-ink-900); line-height: 1; }
+  .stat-card .lbl { font-size: 0.8125rem; color: var(--color-ink-500); }
+  .stat-card .trend { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--color-sage-600); font-weight: 500; }
+  .helpline-card { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .helpline-card .num { font-family: var(--font-mono); font-size: 1.75rem; font-weight: 500; color: var(--color-ink-900); letter-spacing: 0.02em; }
+
+  /* ============ forms ============ */
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; max-width: 56rem; }
+  .field label { display: block; font-size: 0.875rem; font-weight: 500; color: var(--color-ink-900); margin-bottom: 0.375rem; }
+  .field input, .field select {
+    width: 100%; min-height: 44px; border: 1px solid var(--color-sand-300); border-radius: var(--radius-md);
+    background: var(--color-white); padding: 0.625rem 0.875rem; font-family: var(--font-sans);
+    font-size: 0.9375rem; color: var(--color-ink-900);
+    transition: border-color var(--dur-fast) var(--ease-soft), box-shadow var(--dur-fast) var(--ease-soft);
+  }
+  .field input:focus, .field select:focus { outline: none; border-color: var(--color-marigold-600); box-shadow: 0 0 0 3px rgba(158, 74, 38, 0.15); }
+  .field input[aria-invalid="true"] { border-color: var(--color-amber-600); }
+  .field .hint { font-size: 0.8125rem; color: var(--color-ink-500); margin-top: 0.375rem; }
+  .field .error { font-size: 0.8125rem; color: var(--color-amber-600); margin-top: 0.375rem; display: flex; align-items: center; gap: 0.375rem; }
+  .check-row { display: flex; gap: 0.625rem; align-items: flex-start; font-size: 0.9375rem; color: var(--color-ink-700); }
+  .check-row input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--color-marigold-600); }
+  .emotion-scale { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .emotion-scale label {
+    border: 1px solid var(--color-sand-300); border-radius: var(--radius-lg); background: var(--color-white);
+    padding: 0.875rem 1rem; font-size: 0.875rem; color: var(--color-ink-700); cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease-soft), background-color var(--dur-fast) var(--ease-soft);
+    display: inline-flex; align-items: center; gap: 0.5rem;
+  }
+  .emotion-scale input { position: absolute; opacity: 0; }
+  .emotion-scale label:has(input:checked) { border-color: var(--color-marigold-600); background: var(--color-marigold-50); color: var(--color-ink-900); }
+  .emotion-scale .face { font-size: 1rem; }
+
+  /* ============ spacing & radius ============ */
+  .space-bars { display: flex; flex-direction: column; gap: 0.5rem; }
+  .space-row { display: grid; grid-template-columns: 110px 1fr; align-items: center; gap: 1rem; }
+  .space-row .bar { height: 22px; border-radius: var(--radius-sm); background: var(--color-marigold-600); }
+  .space-row .tag { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-ink-500); }
+  .radius-row { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-end; }
+  .radius-demo { width: 72px; height: 72px; background: var(--color-white); border: 1px solid var(--color-sand-300); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 0.375rem; }
+  .radius-row .cap { font-family: var(--font-mono); font-size: 0.6875rem; color: var(--color-ink-500); text-align: center; }
+
+  /* ============ motion ============ */
+  .motion-stage {
+    background: var(--color-white); border: 1px solid var(--color-sand-200); border-radius: var(--radius-xl);
+    padding: 2.5rem; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
+  }
+  .motion-demo {
+    width: 120px; height: 120px; border-radius: var(--radius-xl); background: var(--color-sand-100);
+    border: 1px solid var(--color-sand-200); display: flex; align-items: center; justify-content: center;
+    color: var(--color-ink-500); font-size: 0.8125rem; text-align: center;
+  }
+  .motion-demo.playing { animation: fade-up 560ms var(--ease-gentle) both; }
+  @keyframes fade-up {
+    0% { opacity: 0; transform: translateY(12px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .dur-chips { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .dur-chip {
+    font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-ink-700);
+    border: 1px solid var(--color-sand-300); border-radius: var(--radius-full); padding: 0.375rem 0.875rem;
+    background: var(--color-white);
+  }
+
+  /* ============ experiences ============ */
+  .exp-card { border-top: 3px solid var(--color-marigold-600); }
+  .exp-card.portal { border-top-color: var(--color-sage-600); }
+  .exp-card.casework { border-top-color: var(--color-ink-900); }
+  .exp-card .tag-row { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem; }
+
+  /* ============ footer ============ */
+  footer { padding: 3rem 0 4rem; border-top: 1px solid var(--color-sand-200); }
+  .foot-flex { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; align-items: center; }
+
+  @media (max-width: 720px) {
+    .masthead h1 { font-size: 2.5rem; line-height: 1.08; letter-spacing: -0.015em; }
+    .type-row { grid-template-columns: 1fr; gap: 0.5rem; }
+    .page { padding: 0 1.25rem; }
+    section { padding: 4rem 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= MASTHEAD ================= -->
+<header class="masthead">
+  <div class="page">
+    <svg class="arch-mark" width="56" height="56" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+      <path d="M10 46 V26 C10 14 24 7 28 7 C32 7 46 14 46 26 V46" stroke="#9E4A26" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <path d="M10 46 H46" stroke="#9E4A26" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+    <span class="wordmark">Sahara <span class="dev">सहारा</span></span>
+    <h1>Calm institutional <em>warmth.</em></h1>
+    <p class="lead">A design system for a government-grade platform (Smart India Hackathon 2026 · MoSJE) that
+    sensitively tracks the wellbeing of people who have filed complaints under the SC/ST
+    Prevention of Atrocities Act — one identity, three surfaces: the public site, the victim
+    portal, and the caseworker dashboard. Government-grade credibility. Human-centered softness.</p>
+    <div class="mast-actions">
+      <a class="btn btn-primary" href="#palette">Browse the tokens</a>
+      <a class="btn btn-secondary" href="#experiences">The three experiences</a>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="spec">Design language</span><b>Calm Institutional Warmth</b></div>
+      <div class="meta-item"><span class="spec">Primary</span><b>marigold-600 · #9E4A26</b></div>
+      <div class="meta-item"><span class="spec">Display face</span><b>Fraunces · SOFT 40 · WONK 0</b></div>
+      <div class="meta-item"><span class="spec">Signature</span><b>The Arch — a shelter's doorway</b></div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= PALETTE ================= -->
+<section id="palette">
+  <div class="page">
+    <div class="eyebrow">01 · Color</div>
+    <h2 class="h2">One primary, earned accents, a room for red.</h2>
+    <p class="lead">Sand is the canvas, ink is the voice, marigold is the single primary — capped at
+    ≤5% of any public viewport. Sage is earned by true "safe" states; amber asks for attention without alarm;
+    critical red exists only inside the caseworker dashboard, never on victim-facing screens.</p>
+
+    <div class="scale-title">Sand — warm neutral canvas <span class="spec">/ backgrounds &amp; hairlines</span></div>
+    <div class="scale">
+      <div class="swatch"><div class="chip" style="background:#FAF6EF"></div><div class="info"><b>sand-50</b><span>#FAF6EF</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#F4EDE1"></div><div class="info"><b>sand-100</b><span>#F4EDE1</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#E9DFCE"></div><div class="info"><b>sand-200</b><span>#E9DFCE</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#D8C9B0"></div><div class="info"><b>sand-300</b><span>#D8C9B0</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#C2B096"></div><div class="info"><b>sand-400</b><span>#C2B096</span></div></div>
+    </div>
+
+    <div class="scale-title">Ink — deep charcoal-navy text <span class="spec">/ never pure black</span></div>
+    <div class="scale">
+      <div class="swatch"><div class="chip" style="background:#1F2733"></div><div class="info"><b>ink-900</b><span>#1F2733</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#3A4350"></div><div class="info"><b>ink-700</b><span>#3A4350</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#66707C"></div><div class="info"><b>ink-500</b><span>#66707C</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#98A0AA"></div><div class="info"><b>ink-300</b><span>#98A0AA</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#D5DAE0"></div><div class="info"><b>ink-100</b><span>#D5DAE0</span></div></div>
+    </div>
+
+    <div class="scale-title">Marigold — the one primary <span class="spec">/ muted saffron-terracotta · dried-marigold family</span></div>
+    <div class="scale">
+      <div class="swatch"><div class="chip" style="background:#FBF3EC"></div><div class="info"><b>marigold-50</b><span>#FBF3EC</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#F6E2D2"></div><div class="info"><b>marigold-100</b><span>#F6E2D2</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#EDC5A5"></div><div class="info"><b>marigold-200</b><span>#EDC5A5</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#E0A276"></div><div class="info"><b>marigold-300</b><span>#E0A276</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#D17F4E"></div><div class="info"><b>marigold-400</b><span>#D17F4E</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#B85C33"></div><div class="info"><b>marigold-500</b><span>#B85C33</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#9E4A26"></div><div class="info"><b>marigold-600</b><span>#9E4A26 · primary</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#823C20"></div><div class="info"><b>marigold-700</b><span>#823C20 · hover</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#652F1A"></div><div class="info"><b>marigold-800</b><span>#652F1A · pressed</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#472112"></div><div class="info"><b>marigold-900</b><span>#472112</span></div></div>
+    </div>
+
+    <div class="scale-title">Sage &amp; Amber — safe states and gentle attention</div>
+    <div class="scale">
+      <div class="swatch"><div class="chip" style="background:#4E6A40"></div><div class="info"><b>sage-600</b><span>#4E6A40 · safe</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#E0E9DA"></div><div class="info"><b>sage-100</b><span>#E0E9DA</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#93641A"></div><div class="info"><b>amber-600</b><span>#93641A · attention</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#F7E8C6"></div><div class="info"><b>amber-100</b><span>#F7E8C6</span></div></div>
+    </div>
+
+    <div class="scale-title">Critical — a room, not a color <span class="spec">/ caseworker dashboard only · never victim-facing</span></div>
+    <div class="scale">
+      <div class="swatch"><div class="chip" style="background:#863723"></div><div class="info"><b>critical-600</b><span>#863723</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#FBEFEC"></div><div class="info"><b>critical-50</b><span>#FBEFEC</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TYPOGRAPHY ================= -->
+<section>
+  <div class="page">
+    <div class="eyebrow">02 · Typography</div>
+    <h2 class="h2">Fraunces set straight. Inter, quiet. Plex Mono for instruments.</h2>
+    <p class="lead">A high-quality display serif with the charm dialed down — SOFT 40, WONK 0, weight 500–600 —
+    pairs with a clean grotesk body and a monospaced face for the dashboard's numbers. Devanagari is a first-class
+    citizen of every stack, retuned automatically for taller line boxes and zero negative tracking.</p>
+
+    <div class="type-row"><div class="label"><b>Display</b><span>3.5rem → 4.5rem · lh 1.04 · 500 · −0.02em</span></div>
+      <div class="sample t-display">Support that feels like <em>shelter.</em></div></div>
+    <div class="type-row"><div class="label"><b>H1</b><span>2.5rem · lh 1.08 · 500 · −0.015em</span></div>
+      <div class="sample t-h1">Every person deserves a <em>way forward.</em></div></div>
+    <div class="type-row"><div class="label"><b>H2</b><span>2rem · lh 1.15 · 600 · −0.01em</span></div>
+      <div class="sample t-h2">What support looks like</div></div>
+    <div class="type-row"><div class="label"><b>H3</b><span>1.5rem · lh 1.25 · 600</span></div>
+      <div class="sample t-h3">Someone to talk to</div></div>
+    <div class="type-row"><div class="label"><b>H4</b><span>1.25rem · lh 1.3 · 600</span></div>
+      <div class="sample t-h4">Your support timeline</div></div>
+    <div class="type-row"><div class="label"><b>Body-lg</b><span>1.125rem · lh 1.7 · 400</span></div>
+      <div class="sample t-body-lg">You are not alone in this. A counsellor will listen first, and plan with you at a pace that feels safe.</div></div>
+    <div class="type-row"><div class="label"><b>Body</b><span>1rem · lh 1.65 · 400</span></div>
+      <div class="sample t-body">Talk to someone now. Calls are confidential, and you can hang up at any time.</div></div>
+    <div class="type-row"><div class="label"><b>Small</b><span>0.875rem · lh 1.55</span></div>
+      <div class="sample t-small">Caseworker: review the risk rationale before taking action.</div></div>
+    <div class="type-row"><div class="label"><b>Caption</b><span>0.8125rem · 500</span></div>
+      <div class="sample t-caption">Updated 5 minutes ago</div></div>
+    <div class="type-row"><div class="label"><b>Eyebrow</b><span>0.75rem · 600 · +0.12em · caps</span></div>
+      <div class="sample t-eyebrow">How Sahara works</div></div>
+    <div class="type-row"><div class="label"><b>Data</b><span>0.875rem · mono · 500</span></div>
+      <div class="sample t-data">Risk score 072 · case #SA-24-1183 · SLA 0:42:11</div></div>
+
+    <div class="hi-block" lang="hi">
+      <span class="hi-flag">Devanagari · lang="hi"</span>
+      <div class="hi-headline">सहारा — जब आपको सहारे की ज़रूरत हो</div>
+      <p>आपकी हर बात गोपनीय रहेगी। कोई भी कदम उठाने से पहले हम आपकी मंज़ूरी लेंगे, और आप कभी भी रुक सकते हैं।</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ACTIONS ================= -->
+<section>
+  <div class="page">
+    <div class="eyebrow">03 · Actions</div>
+    <h2 class="h2">Buttons that say exactly what they do.</h2>
+    <p class="lead">8px corners, 44px touch targets, marigold only for the primary path. Danger exists
+    exclusively in the caseworker app. Loading keeps its label and a slow, calm spinner.</p>
+
+    <div class="btn-group" style="margin-bottom:1.25rem">
+      <button class="btn btn-primary">Talk to someone now</button>
+      <button class="btn btn-secondary">How Sahara works</button>
+      <button class="btn btn-ghost">Ghost action</button>
+      <button class="btn btn-danger">Escalate case <span class="spec" style="color:rgba(255,255,255,.7)">· caseworker only</span></button>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" disabled>Disabled primary</button>
+      <button class="btn btn-primary"><span class="spinner"></span> Saving note…</button>
+      <button class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 56 56" fill="none" aria-hidden="true" style="margin-right:2px">
+          <path d="M10 46 V26 C10 14 24 7 28 7 C32 7 46 14 46 26 V46" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <path d="M10 46 H46" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+        Enter the shelter
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BADGES ================= -->
+<section>
+  <div class="page">
+    <div class="eyebrow">04 · Status language</div>
+    <h2 class="h2">Two dialects of the same truth.</h2>
+    <p class="lead">Caseworkers read Stable / Monitoring / Elevated / Critical beside an AI-score disclosure.
+    Victim-facing screens say Supported / In progress / Needs support soon — never red, never "critical."
+    Status is never conveyed by color alone: every badge carries an icon or dot and a word.</p>
+
+    <div class="scale-title">Caseworker dialect <span class="spec">/ dashboard</span></div>
+    <div class="btn-group">
+      <span class="badge badge-sage"><span class="dot"></span>Stable</span>
+      <span class="badge badge-amber"><span class="dot"></span>Monitoring</span>
+      <span class="badge badge-amber" style="border-color:var(--color-amber-400);color:var(--color-amber-700)"><span class="dot"></span>Elevated</span>
+      <span class="badge badge-critical"><span class="dot"></span>Critical</span>
+    </div>
+    <div class="scale-title" style="margin-top:1.5rem">Victim-facing dialect <span class="spec">/ portal · never red</span></div>
+    <div class="btn-group">
+      <span class="badge badge-sage"><span class="dot"></span>Supported</span>
+      <span class="badge badge-amber"><span class="dot"></span>In progress</span>
+      <span class="badge badge-amber" style="border-color:var(--color-amber-400);color:var(--color-amber-700)"><span class="dot"></span>Needs support soon</span>
+      <span class="badge badge-neutral"><span class="dot"></span>Neutral</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CARDS & ELEVATION ================= -->
+<section>
+  <div class="page">
+    <div class="eyebrow">05 · Cards &amp; elevation</div>
+    <h2 class="h2">Borders separate. Shadows lift.</h2>
+    <p class="lead">Cards sit on sand with a hairline and a whisper of shadow; hover earns a 3px rise.
+    If a shadow is visible as a shape, it's too hard.</p>
+
+    <div class="cards">
+      <div class="card hoverable">
+        <h4>Someone to talk to</h4>
+        <p>A counsellor who listens first and plans with you at a pace that feels safe — today, not in a queue.</p>
+      </div>
+      <div class="card hoverable">
+        <h4>A plan that fits</h4>
+        <p>Housing, legal aid, income, children's schooling — support that follows you through each step.</p>
+      </div>
+      <div class="card stat-card">
+        <div>
+          <span class="num">13,482</span>
+          <span class="lbl" style="display:block;margin-top:4px">people supported last year</span>
+        </div>
+        <span class="trend">
+          <svg width="72" height="20" viewBox="0 0 72 20" fill="none" aria-hidden="true">
+            <path d="M2 16 L14 13 L26 14 L38 9 L50 10 L62 5 L70 3" stroke="#4E6A40" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          +18% from 2024
+        </span>
+      </div>
+      <div class="card helpline-card">
+        <div>
+          <h4 style="margin-bottom:0.25rem">NHAA · SC/ST helpline</h4>
+          <p style="font-size:0.8125rem;color:var(--color-ink-500)">24×7 · Hindi &amp; English · free</p>
+        </div>
+        <span class="num">14566</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FORMS ================= -->
+<section>
+  <div class="page">
+    <div class="eyebrow">06 · Forms</div>
+    <h2 class="h2">Fields that never shame.</h2>
+    <p class="lead">Validation errors are amber, explanatory, and always paired with a next step.
+    The check-in emotion scale is the portal's gentlest surface — skipping is always allowed.</p>
+
+    <div class="form-grid">
+      <div class="field">
+        <label for="f1">Your first name</label>
+        <input id="f1" type="text" placeholder="As you'd like us to address you">
+        <div class="hint">We never show this to anyone without your consent.</div>
+      </div>
+      <div class="field">
+        <label for="f2">Mobile number</label>
+        <input id="f2" type="tel" inputmode="tel" placeholder="+91 ··········" aria-invalid="true">
+        <div class="error">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.75"/><path d="M12 8v5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><circle cx="12" cy="16.2" r="1" fill="currentColor"/></svg>
+          This number doesn't look complete — please check and try again.
+        </div>
+      </div>
+      <div class="field">
+        <label for="f3">Your preferred language</label>
+        <select id="f3">
+          <option>हिंदी (Hindi)</option>
+          <option selected>English</option>
+          <option>मराठी (Marathi)</option>
+        </select>
+        <div class="hint">You can change this anytime.</div>
+      </div>
+    </div>
+
+    <div style="height:2rem"></div>
+    <div class="scale-title">Wellbeing check-in · portal pattern</div>
+    <div class="emotion-scale" role="radiogroup" aria-label="How are you feeling today">
+      <label><input type="radio" name="mood" value="low"><span class="face">●</span> Not okay</label>
+      <label><input type="radio" name="mood" value="low2"><span class="face">◐</span> A little low</label>
+      <label><input type="radio" name="mood" value="ok"><span class="face">◑</span> Steady</label>
+      <label><input type="radio" name="mood" value="good"><span class="face">◕</span> Better than before</label>
+      <label><input type="radio" name="mood" value="skip"><span class="face">—</span> Skip for today</label>
+    </div>
+    <p class="spec" style="margin-top:0.75rem">Skipping never asks why. The result is narrated in words, never graphed.</p>
+
+    <div style="height:2rem"></div>
+    <div class="scale-title">Consent &amp; privacy controls</div>
+    <div style="display:flex;flex-direction:column;gap:0.875rem;max-width:36rem">
+      <label class="check-row"><input type="checkbox" checked> Share my check-in summary with my caseworker</label>
+      <label class="check-row"><input type="checkbox" checked> Send me gentle reminders (never more than twice a week)</label>
+      <label class="check-row"><input type="checkbox"> Allow anonymous use of my data to improve services</label>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SPACING & RADIUS ================= -->
+<section>
+  <div class="page">
+    <div class="eyebrow">07 · Spacing &amp; radius</div>
+    <h2 class="h2">An 8pt rhythm. One radius per job.</h2>
+    <p class="lead">Generous whitespace is a safety feature. The half-step (4px) exists for icon-to-label gaps
+    only — never for layout rhythm.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem" class="split">
+      <div>
+        <div class="scale-title">8pt spacing scale</div>
+        <div class="space-bars">
+          <div class="space-row"><span class="tag">4 · half-step</span><div class="bar" style="width:8px"></div></div>
+          <div class="space-row"><span class="tag">8</span><div class="bar" style="width:16px"></div></div>
+          <div class="space-row"><span class="tag">12</span><div class="bar" style="width:24px"></div></div>
+          <div class="space-row"><span class="tag">16</span><div class="bar" style="width:32px"></div></div>
+          <div class="space-row"><span class="tag">24</span><div class="bar" style="width:48px"></div></div>
+          <div class="space-row"><span class="tag">32</span><div class="bar" style="width:64px"></div></div>
+          <div class="space-row"><span class="tag">48</span><div class="bar" style="width:96px"></div></div>
+          <div class="space-row"><span class="tag">64</span><div class="bar" style="width:128px"></div></div>
+          <div class="space-row"><span class="tag">96</span><div class="bar" style="width:192px"></div></div>
+          <div class="space-row"><span class="tag">128</span><div class="bar" style="width:256px"></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="scale-title">Corner vocabulary</div>
+        <div class="radius-row">
+          <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center">
+            <div class="radius-demo" style="border-radius:6px"></div><span class="cap">6px · chips</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center">
+            <div class="radius-demo" style="border-radius:8px"></div><span class="cap">8px · inputs &amp; buttons</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center">
+            <div class="radius-demo" style="border-radius:16px"></div><span class="cap">16px · cards</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center">
+            <div class="radius-demo" style="border-radius:24px"></div><span class="cap">24px · modals</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center">
+            <div class="radius-demo" style="border-radius:9999px"></div><span class="cap">full · badges only</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MOTION ================= -->
+<section>
+  <div class="page">
+    <div class="eyebrow">08 · Motion</div>
+    <h2 class="h2">Gentle, unhurried, reassuring.</h2>
+    <p class="lead">Nothing bounces, nothing springs. Entrances fade and rise 8–12px over 360–560ms on a
+    decelerating curve. Every animation defers to <span class="spec">prefers-reduced-motion</span>.</p>
+
+    <div class="motion-stage">
+      <div class="motion-demo" id="motionDemo">fade-up · 560ms</div>
+      <div>
+        <button class="btn btn-secondary" id="replayBtn" type="button">Replay entrance</button>
+        <div style="height:1rem"></div>
+        <div class="dur-chips">
+          <span class="dur-chip">micro 100ms · state</span>
+          <span class="dur-chip">fast 160ms · hover</span>
+          <span class="dur-chip">base 240ms · standard</span>
+          <span class="dur-chip">slow 360ms · overlays</span>
+          <span class="dur-chip">slower 560ms · entrances</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EXPERIENCES ================= -->
+<section id="experiences">
+  <div class="page">
+    <div class="eyebrow">09 · The three experiences</div>
+    <h2 class="h2">One system, three registers.</h2>
+    <p class="lead">Enforced by density, not by new tokens: serif-led and generous on the public site,
+    narrow and gentle in the portal, sans-led and compact in the dashboard.</p>
+
+    <div class="cards">
+      <div class="card exp-card">
+        <div class="tag-row"><span class="badge badge-neutral">sahara.in</span><span class="badge badge-neutral">+ /hi/</span></div>
+        <h4>Public site</h4>
+        <p>Editorial and image-forward. Builds trust, moves people to action. Marigold ≤5% of any viewport.</p>
+      </div>
+      <div class="card exp-card portal">
+        <div class="tag-row"><span class="badge badge-sage">portal</span></div>
+        <h4>My Sahara · मेरा सहारा</h4>
+        <p>Calm, narrow (44rem), minimal chrome. One person's safe private space. Never the word "victim"; never red.</p>
+      </div>
+      <div class="card exp-card casework">
+        <div class="tag-row"><span class="badge badge-neutral">caseworker</span></div>
+        <h4>Caseworker dashboard</h4>
+        <p>Dense, professional, data-first. Ink sidebar, mono numerals, full palette — critical red lives here alone.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="page foot-flex">
+    <div>
+      <span class="wordmark" style="font-size:1rem">Sahara <span class="dev">सहारा</span></span>
+      <p class="spec" style="margin-top:0.375rem">Design System v1.0 · "Calm Institutional Warmth"</p>
+    </div>
+    <p class="spec">Source of truth: design-system/tokens.css &amp; design-system/tailwind.config.js</p>
+  </div>
+</footer>
+
+<script>
+  // Replay the gentle entrance (respects reduced-motion via CSS media query).
+  document.getElementById('replayBtn').addEventListener('click', function () {
+    var demo = document.getElementById('motionDemo');
+    demo.classList.remove('playing');
+    void demo.offsetWidth; // restart animation
+    demo.classList.add('playing');
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahara — User Handbook &amp; Platform Guide</title>
+<style>
+  :root{ --ink:#231f1a; --ink-soft:#5c554b; --sand:#f6f1e8; --sand-2:#efe7d9; --marigold:#9e4a26; --marigold-soft:#f7e9df; --sage:#2f6b56; --white:#ffffff; }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--ink); background:var(--white); line-height:1.55; font-size:15px; }
+  .wrap{max-width:860px; margin:0 auto; padding:40px 28px 80px;}
+  .cover{ background:linear-gradient(135deg,var(--ink) 0%,#3a2c22 100%); color:#f4ede2; border-radius:18px; padding:52px 44px; margin-bottom:36px; }
+  .cover .tag{display:inline-block; letter-spacing:.22em; text-transform:uppercase; font-size:12px; color:#e8b48a; font-weight:600; margin-bottom:18px;}
+  .cover h1{font-size:42px; line-height:1.08; font-weight:800; letter-spacing:-.01em;}
+  .cover h1 span{color:#e8b48a;}
+  .cover p.lead{margin-top:16px; font-size:17px; color:#d9cfc0; max-width:60ch;}
+  .cover .meta{margin-top:26px; padding-top:20px; border-top:1px solid rgba(255,255,255,.16); font-size:13px; color:#b9ad9d;}
+  .toc{background:var(--sand); border:1px solid #e2d8c7; border-radius:14px; padding:22px 26px; margin-bottom:34px;}
+  .toc h2{font-size:14px; letter-spacing:.18em; text-transform:uppercase; color:var(--marigold); margin-bottom:12px;}
+  .toc ol{margin-left:20px;} .toc a{color:var(--ink); text-decoration:none;} .toc a:hover{color:var(--marigold);} .toc li{margin:5px 0;}
+  section{margin-bottom:40px;}
+  h2{ font-size:26px; font-weight:800; letter-spacing:-.01em; color:var(--ink); padding-bottom:10px; margin-bottom:16px; border-bottom:3px solid var(--marigold-soft); }
+  h2 .num{color:var(--marigold);}
+  h3{font-size:19px; font-weight:700; margin:22px 0 8px; color:#3a2c22;}
+  p{margin:10px 0;} ul,ol{margin:10px 0 10px 22px;} li{margin:5px 0;} strong{color:var(--ink);}
+  .card{background:var(--sand); border:1px solid #e2d8c7; border-radius:12px; padding:18px 20px; margin:14px 0;}
+  .card h4{margin-top:0; font-size:15px; color:var(--marigold);}
+  .callout{border-left:4px solid var(--marigold); background:var(--marigold-soft); border-radius:0 10px 10px 0; padding:14px 18px; margin:16px 0;}
+  .callout.green{border-color:var(--sage); background:#eaf3ee;} .callout h4{margin:0 0 6px; font-size:15px;}
+  table{width:100%; border-collapse:collapse; margin:14px 0; font-size:13.5px;}
+  th,td{border:1px solid #ddd2bf; padding:8px 10px; text-align:left; vertical-align:top;}
+  th{background:var(--sand-2); font-weight:700;} tr:nth-child(even) td{background:#fbf8f2;}
+  code{background:var(--sand-2); padding:1px 6px; border-radius:5px; font-size:.92em; font-family:Consolas,monospace;}
+  pre{background:#1f1b16; color:#f0e9dc; border-radius:10px; padding:14px 16px; overflow:auto; font-size:12.5px; line-height:1.5; margin:12px 0;}
+  pre code{background:none; padding:0; color:inherit;}
+  .badge{display:inline-block; font-size:11px; font-weight:700; letter-spacing:.05em; padding:2px 8px; border-radius:20px; vertical-align:middle;}
+  .b-real{background:var(--sage); color:#fff;} .b-part{background:#c8901f; color:#fff;} .b-mock{background:#8a7f75; color:#fff;}
+  .pill{display:inline-block; background:var(--white); border:1px solid #d8cdb9; border-radius:20px; padding:3px 12px; margin:3px 4px 3px 0; font-size:12.5px;}
+  .hr{height:1px; background:#e6ddcc; margin:26px 0;} .small{font-size:12.5px; color:var(--ink-soft);}
+  @media print{
+    body{font-size:11.5px;} .wrap{padding:0 12px; max-width:none;}
+    .cover{border-radius:0; padding:34px 26px;} .cover h1{font-size:30px;}
+    h2{page-break-after:avoid;} section{page-break-inside:auto;}
+    .card,.callout,table,pre{page-break-inside:avoid;} a{color:var(--ink); text-decoration:none;}
+    .pagebreak{page-break-before:always;}
+  }
+  @media screen{ .pagebreak{margin-top:46px;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ================= COVER ================= -->
+  <div class="cover">
+    <div class="tag">Sahara · SIH26094 · Ministry of Social Justice &amp; Empowerment</div>
+    <h1>Sahara <span>सहारा</span><br>User Handbook &amp; Platform Guide</h1>
+    <p class="lead">
+      AI-powered wellbeing monitoring &amp; distress prediction for survivors of caste-based atrocities —
+      a calm, consent-based companion that sits alongside the NHAA helpline, not instead of it.
+    </p>
+    <div class="meta">
+      <strong>For:</strong> Survivors · Families · Caseworkers · Officials · Government partners &nbsp;·&nbsp;
+      <strong>Approach:</strong> "A human is always there."
+    </div>
+  </div>
+
+  <!-- ================= TOC ================= -->
+  <div class="toc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#s1">What Sahara Is — and What It Is Not</a></li>
+      <li><a href="#s2">Who It Is For: The Five Roles</a></li>
+      <li><a href="#s3">The Big Idea: Complaint → Care</a></li>
+      <li><a href="#s4">How a Visitor Uses the Website (General Public)</a></li>
+      <li><a href="#s5">How a Survivor (Beneficiary) Uses It, Step by Step</a></li>
+      <li><a href="#s6">How a Caseworker Uses It, Step by Step</a></li>
+      <li><a href="#s7">How Officials / Admins Use It, Step by Step</a></li>
+      <li><a href="#s8">Key Features Explained</a></li>
+      <li><a href="#s9">Benefits of Using Sahara</a></li>
+      <li><a href="#s10">Advantages of the Technology Stack Used</a></li>
+      <li><a href="#s11">How to Run the Platform (Developer Guide)</a></li>
+      <li><a href="#s12">Architecture at a Glance</a></li>
+      <li><a href="#s13">Privacy, Ethics &amp; the "Human Decides" Rule</a></li>
+      <li><a href="#s14">Honest Status: Real vs. Prototype</a></li>
+    </ol>
+  </div>
+
+  <!-- ================= 1 ================= -->
+  <section id="s1">
+    <h2><span class="num">1.</span> What Sahara Is — and What It Is Not</h2>
+    <p>
+      <strong>Sahara ("सहारा" = support)</strong> is a digital support platform built for the Smart India Hackathon
+      (SIH26094) for the Ministry of Social Justice &amp; Empowerment. It helps a person who has filed a complaint
+      under the <strong>SC/ST (Prevention of Atrocities) Act</strong> stay emotionally anchored during the long,
+      often lonely journey that follows — <em>checking in, taking small steps toward wellbeing, and connecting with
+      human support when it is needed — before a crisis, not after.</em>
+    </p>
+    <div class="callout">
+      <h4>What Sahara is</h4>
+      <ul>
+        <li>A calm, private space to share how you are feeling and see your own wellbeing trend.</li>
+        <li>A guided wellbeing check-in that only <em>suggests</em> risk to a human — it never decides.</li>
+        <li>A multilingual companion (English, हिंदी, ଓଡ଼ିଆ) to talk to, guided by trauma-informed prompts.</li>
+        <li>A safety net for caseworkers: a prioritised queue and a timeline of AI signals vs. human action.</li>
+        <li>A monitoring route for officials: national → state → district views, without leaking private details.</li>
+      </ul>
+    </div>
+    <div class="callout green">
+      <h4>What Sahara is NOT</h4>
+      <ul>
+        <li><strong>Not a replacement for the NHAA helpline (14566).</strong> The helpline stays the first door for reporting and immediate help.</li>
+        <li><strong>Not a clinical diagnosis.</strong> It produces "AI-assisted risk estimates," not medical opinions.</li>
+        <li><strong>Not an automatic decision-maker.</strong> No action ever happens without a trained human reviewing it.</li>
+        <li><strong>Not your whole support system.</strong> It connects you to humans, it does not replace them.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= 2 ================= -->
+  <section id="s2">
+    <h2><span class="num">2.</span> Who It Is For: The Five Roles</h2>
+    <p>Sahara has one public website and several signed-in portals. Each role sees only what it is allowed to see.</p>
+    <table>
+      <tr><th>Role</th><th>Who</th><th>What they see / do</th></tr>
+      <tr><td><strong>Visitor (public)</strong></td><td>Anyone</td><td>Learn how Sahara works, browse resources &amp; helplines, talk to the guest chatbot, contact the team.</td></tr>
+      <tr><td><strong>Beneficiary</strong></td><td>The survivor</td><td>Their own wellbeing history, guided check-in, the Talk companion, and a request for human support.</td></tr>
+      <tr><td><strong>Caseworker</strong></td><td>Counsellor / case officer</td><td>Prioritised risk queue, case timeline, logging human follow-ups, and crisis chat flags.</td></tr>
+      <tr><td><strong>Officials / Admins</strong></td><td>District, State, National</td><td>Aggregated monitoring dashboards, without raw chat text or a flood of personal data.</td></tr>
+      <tr><td><strong>The system</strong></td><td>AI engine + humans</td><td>The risk engine ranks cases; a trained human decides what happens next.</td></tr>
+    </table>
+    <p class="small">Access is enforced both in the app navigation <em>and</em> on the server (role-scoped JWT tokens). A beneficiary, for example, cannot read the caseworker queue.</p>
+  </section>
+
+  <!-- ================= 3 ================= -->
+  <section id="s3">
+    <h2><span class="num">3.</span> The Big Idea: Complaint → Care</h2>
+    <p>Sahara sits deliberately right after the complaint:</p>
+    <ol>
+      <li><strong>Helpline (14566):</strong> reporting + immediate help — the first door.</li>
+      <li><strong>Complaint filed</strong> under the SC/ST (PoA) Act — the formal legal step.</li>
+      <li><strong>Sahara:</strong> the quiet, continuous wellbeing support after filing — check-ins, small steps, and informed caseworkers.</li>
+      <li><strong>Caseworker review:</strong> AI signals are reviewed by a person who decides whether to reach out.</li>
+    </ol>
+    <p>In short: the helpline starts the journey; Sahara stays with the person through it.</p>
+  </section>
+
+  <!-- ================= 4 ================= -->
+  <section id="s4">
+    <h2><span class="num">4.</span> How a Visitor Uses the Website (General Public)</h2>
+    <p>No account is needed. The public site does the explaining.</p>
+    <ol>
+      <li><strong>Open the homepage.</strong> You land on a calm mountain-and-sunrise hero reading "Hope Still Rises," with the headline <em>"A safer, kinder tomorrow."</em></li>
+      <li><strong>Choose a lane on "How it works":</strong> <em>I need support</em> · <em>I'm a caseworker or counsellor</em> · <em>I'm a government partner.</em></li>
+      <li><strong>Browse the site:</strong> How It Works · For Victims &amp; Families · For Officials · Resources · Contact · About · Privacy.</li>
+      <li><strong>Use the Resources page:</strong> a filterable helpline directory with click-to-call numbers.</li>
+      <li><strong>Try the floating chat bot:</strong> any visitor can talk to the demo companion; a human is behind it.</li>
+      <li><strong>Quick Exit:</strong> use the safety button to leave and clear the screen in one tap.</li>
+      <li><strong>Switch language:</strong> toggle English / हिंदी in the navigation; Odia is on the roadmap.</li>
+    </ol>
+    <div class="card">
+      <h4>What to tell a survivor family</h4>
+      <p>You do not need to understand the system to use it. Call 14566, or ask anyone you trust to reach out for you — consent stays yours either way.</p>
+    </div>
+  </section>
+
+  <!-- ================= 5 ================= -->
+  <section id="s5">
+    <h2><span class="num">5.</span> How a Survivor (Beneficiary) Uses It, Step by Step</h2>
+    <p>The beneficiary portal is the survivor's own private space — "<em>My Sahara.</em>" It shows only their own check-in history, never anyone else's.</p>
+    <ol>
+      <li><strong>Sign in.</strong> Use the emailed beneficiary account (the demo account is in Section 11). The portal opens on <em>"Your wellbeing, in your hands."</em></li>
+      <li><strong>See your trend.</strong> A calm chart shows your distress scores over the last 60 days so you can see how you are doing at a glance — narrated in words, not just graphs.</li>
+      <li><strong>Do a wellbeing check-in.</strong> Answer a few short questions (mood, sleep, feeling safe, any recent incident, support received). This feeds only your own record.</li>
+      <li><strong>Review your support plan.</strong> Small, gentle next steps and reflections are offered — never a list of demands.</li>
+      <li><strong>Talk to Sahara.</strong> Open the companion and share how you feel in English, हिंदी, or ଓଡ଼ିଆ. It can also walk you through a check-in conversationally.</li>
+      <li><strong>See your risk honestly.</strong> If the system flags a change, you are told it is an "AI-assisted risk estimate — not a diagnosis," and that a human review happens before any contact.</li>
+      <li><strong>Request a human.</strong> Ask for human support at any moment. A caseworker follows up — nothing automated overrides that.</li>
+      <li><strong>Delete or pause anytime.</strong> One tap. Withdrawing consent never affects the underlying complaint.</li>
+    </ol>
+    <div class="callout green">
+      <h4>Why it feels safe</h4>
+      <p>Only what you consent to share is used: your check-ins and the support record you build. Location and messages are not inputs to the risk engine. You can leave whenever you want.</p>
+    </div>
+  </section>
+
+  <!-- ================= 6 ================= -->
+  <section id="s6">
+    <h2><span class="num">6.</span> How a Caseworker Uses It, Step by Step</h2>
+    <p>The caseworker console turns a noisy caseload into a quiet, prioritised list.</p>
+    <ol>
+      <li><strong>Open the risk queue.</strong> Cases are sorted <em>crisis-first</em>, then by priority score — with a reason for why each case is ranked where it is.</li>
+      <li><strong>Read the explainability panel.</strong> For any case you see the current risk, 7/14/30-day trend, escalation probability, contributing factors, and "why has this case been prioritised?"</li>
+      <li><strong>Open a case timeline.</strong> A single view distinguishes <strong>AI events</strong> from <strong>human actions</strong>, so you always know what the machine suggested vs. what someone actually did.</li>
+      <li><strong>Check crisis chat flags.</strong> A panel lists users flagged in the last 24 hours with urgency, sentiment and keywords — <em>never raw conversation text</em> in the dashboard.</li>
+      <li><strong>Log a human follow-up.</strong> When you contact or escalate, record it — this logs a timestamp and action.</li>
+      <li><strong>Decide with your judgment.</strong> Marking follow-up completed never auto-reduces the score or marks someone safe — <em>you</em> decide.</li>
+    </ol>
+    <div class="callout">
+      <h4>Human-over-AI</h4>
+      <p>The AI ranks and signals; the caseworker decides and acts. The system never auto-contacts on a risk signal.
+    </div>
+  </section>
+
+  <!-- ================= 7 ================= -->
+  <section id="s7">
+    <h2><span class="num">7.</span> How Officials / Admin Use It, Step by Step</h2>
+    <p>District, state and national admins monitor aggregated, privacy-preserving views.</p>
+    <ol>
+      <li><strong>District officer:</strong> sees a focused district view (e.g. Odisha · Khordha) of risk bands and queues.</li>
+      <li><strong>State admin:</strong> sees state-level aggregates across districts — counts per risk band, worsening trends, crisis flags.</li>
+      <li><strong>National admin:</strong> rolls states up into a national picture for monitoring and response planning.</li>
+      <li><strong>Key detail:</strong> dashboards hide raw chat and private narratives, showing only aggregated counts and explainable reasons — no PII flood.</li>
+      <li><strong>Deep links:</strong> officials can drill to a demonstrable case (e.g. DEMO-042) to see the full complaint→care workflow.</li>
+    </ol>
+    <div class="card">
+      <h4>Design goal</h4>
+      <p>Give leadership a truthful, decision-ready picture without exposing sensitive personal information.</p>
+    </div>
+  </section>
+
+  <!-- ================= 8 ================= -->
+  <section id="s8">
+    <h2><span class="num">8.</span> Key Features Explained</h2>
+    <table>
+      <tr><th>Feature</th><th>What it does</th><th>Status</th></tr>
+      <tr><td>Guided wellbeing check-in</td><td>Short, gentle questions that feed a scoring pipeline and the survivor's own trend.</td><td><span class="badge b-real">Real</span></td></tr>
+      <tr><td>Wellbeing trend chart</td><td>60-day view of the score with annotations and narration in words.</td><td><span class="badge b-real">Real</span></td></tr>
+      <tr><td>Multilingual companion</td><td>Trauma-informed chat in English, हिंदी, ଓଡ଼ିଆ with a deterministic crisis card.</td><td><span class="badge b-real">Real</span></td></tr>
+      <tr><td>Distress engine</td><td>Explainable rule-based risk scoring, trends and contributing factors.</td><td><span class="badge b-real">Real</span></td></tr>
+      <tr><td>Caseworker risk queue</td><td>Crisis-first prioritised list with a reason per case.</td><td><span class="badge b-real">Real</span></td></tr>
+      <tr><td>Human follow-up log</td><td>Record of contact / escalation / notes; never auto-clears the score.</td><td><span class="badge b-real">Real</span></td></tr>
+      <tr><td>Auth + role control</td><td>JWT + bcrypt; beneficiary / caseworker / admin scoping enforced server-side.</td><td><span class="badge b-real">Real</span></td></tr>
+      <tr><td>Sentiment model</td><td>XLM-RoBERTa multilingual model with a keyword fallback.</td><td><span class="badge b-part">Partial</span></td></tr>
+      <tr><td>Check-in → automatic alert</td><td>Auto risk-assess + alert right after every check-in.</td><td><span class="badge b-part">Partial</span></td></tr>
+      <tr><td>Admin / Command dashboard</td><td>National → state → district monitoring views.</td><td><span class="badge b-mock">Demo (backend real)</span></td></tr>
+      <tr><td>Alert centre UI (marketing)</td><td>Clickable alert demo shown on the public site.</td><td><span class="badge b-mock">Demo</span></td></tr>
+    </table>
+    <div class="card">
+      <h4>The "no fake numbers" principle</h4>
+      <p>Everywhere a number or band appears, the system labels itself honestly: <em>"AI-assisted risk estimate. This is not a clinical diagnosis."</em> The final call always rests with an authorised human counsellor or caseworker.</p>
+    </div>
+  </section>
+
+  <!-- ================= 9 ================= -->
+  <section id="s9">
+    <h2><span class="num">9.</span> Benefits of Using Sahara</h2>
+    <h3>For survivors</h3>
+    <ul>
+      <li><strong>You are not alone.</strong> A quiet companion checks in on you between official appointments — before a crisis, not after.</li>
+      <li><strong>Small steps, real progress.</strong> Gentle nudges and reflections you can actually take, in your language.</li>
+      <li><strong>Yours only.</strong> A private space showing only your own data; nothing is shared without consent.</li>
+      <li><strong>Leave anytime.</strong> Pausing or withdrawing is one tap and never harms your underlying complaint.</li>
+    </ul>
+    <h3>For caseworkers</h3>
+    <ul>
+      <li><strong>See the whole story.</strong> Every contact and signal in one honest timeline (AI vs. human).</li>
+      <li><strong>Work the right cases.</strong> A crisis-first queue means your judgment, not your inbox, decides.</li>
+      <li><strong>Proof of your care.</strong> Follow-ups are logged and visible — no false reassurance.</li>
+    </ul>
+    <h3>For officials &amp; government</h3>
+    <ul>
+      <li><strong>Decision-ready, private-safe.</strong> Aggregates and explainable reasons without raw conversations.</li>
+      <li><strong>State-integration friendly.</strong> One Stop Centres, helplines and grievance desks can plug in.</li>
+      <li><strong>DPDP-aligned posture.</strong> Access is role-limited and minimised-by-design.</li>
+    </ul>
+    <div class="callout">
+      <h4>The core benefit, in one line</h4>
+      <p>Sahara turns a lonely, intimidating process into <strong>a supported, human-checked journey</strong> — the machine watches for distress, and a person decides how to help.</p>
+    </div>
+  </section>
+
+  <!-- ================= 10 ================= -->
+  <section id="s10">
+    <h2><span class="num">10.</span> Advantages of the Technology Stack Used</h2>
+    <table>
+      <tr><th>Layer</th><th>Technology</th><th>Why it is an advantage</th></tr>
+      <tr><td>Frontend</td><td><code>React 18</code> + <code>Vite</code></td><td>Fast hot-reload dev, lazy-loaded page chunks (only loads what you visit), smooth route transitions.</td></tr>
+      <tr><td>Styling</td><td><code>Tailwind</code> + design tokens</td><td>Consistent, calm visual system; reduced-motion awareness; accessible by default.</td></tr>
+      <tr><td>Motion</td><td><code>Framer Motion</code></td><td>Buttery parallax hero and transitions while respecting <code>prefers-reduced-motion</code>.</td></tr>
+      <tr><td>Charts</td><td><code>Recharts</code></td><td>Accessible trend visualisations for wellbeing and admin dashboards.</td></tr>
+      <tr><td>i18n</td><td>Custom <code>LangProvider</code></td><td>EN / HI (and Oriya roadmap) with clean <code>t(\"key\")</code> lookups across the app.</td></tr>
+      <tr><td>Backend</td><td><code>FastAPI</code> + <code>Pydantic v2</code></td><td>Type-safe, self-documenting API (interactive <code>/docs</code>), async by default.</td></tr>
+      <tr><td>Database</td><td><code>MongoDB</code> via <code>Motor</code></td><td>Async driver, flexible documents, resilient boot (starts even if DB is down).</td></tr>
+      <tr><td>AI — sentiment</td><td>XLM-RoBERTa (transformer)</td><td>Multilingual sentiment (English + Hindi + romanised Hindi), cached to avoid reloads.</td></tr>
+      <tr><td>AI — safety net</td><td>Bilingual keyword engine</td><td>Deterministic floor: can force a minimum risk even if the model is unavailable.</td></tr>
+      <tr><td>AI — chat</td><td>Claude (server-side) + Gemini fallback</td><td>Trauma-informed replies; the API key never leaves the server; graceful mock mode.</td></tr>
+      <tr><td>Security</td><td><code>bcrypt</code> + <code>PyJWT</code></td><td>Passwords never stored; phone numbers stored only as hashes; role-scoped tokens.</td></tr>
+      <tr><td>Testing</td><td>Pytest + in-memory Mongo</td><td>339 automated checks, no live DB/model needed to run.</td></tr>
+    </table>
+    <h3>Why this stack in particular</h3>
+    <ul>
+      <li><strong>Honest AI.</strong> The rule-based engine is explainable — officials and caseworkers see <em>why</em> a case is flagged, not just that it is.</li>
+      <li><strong>Resilient.</strong> If the model or DB fails, keyword fallbacks and synthetic data keep the demo running instead of crashing.</li>
+      <li><strong>Gov-ready posture.</strong> DPDP-aligned governance, role-limited exposure, and no protected characteristics as model inputs.</li>
+      <li><strong>Fast to build on.</strong> Vite + FastAPI make iteration quick on a hackathon-to-production path.</li>
+    </ul>
+  </section>
+
+  <!-- ================= 11 ================= -->
+  <section id="s11">
+    <h2><span class="num">11.</span> How to Run the Platform (Developer Guide)</h2>
+    <h3>Demo accounts (development only — do not use in production)</h3>
+    <p>All demo accounts share the password: <code>SIH-Demo-2026!</code></p>
+    <table>
+      <tr><th>Role</th><th>Email</th><th>Notes</th></tr>
+      <tr><td>National Admin</td><td><code>national.demo@sahara-demo.local</code></td><td>National → State → District monitoring</td></tr>
+      <tr><td>State Admin</td><td><code>state.demo@sahara-demo.local</code></td><td>Odisha state aggregates</td></tr>
+      <tr><td>District Officer</td><td><code>district.demo@sahara-demo.local</code></td><td>Odisha · Khordha</td></tr>
+      <tr><td>Caseworker</td><td><code>caseworker.demo@sahara-demo.local</code></td><td>Caseload incl. DEMO-042</td></tr>
+      <tr><td>Beneficiary</td><td><code>beneficiary.demo@sahara-demo.local</code></td><td>P. Kumar — own wellbeing only</td></tr>
+    </table>
+    <h3>Start the backend</h3>
+    <pre><code>cd sahara-backend
+python -m venv .venv && .venv\Scripts\activate
+pip install -r requirements.txt
+cp .env.example .env            # add ANTHROPIC_API_KEY to enable chat
+uvicorn main:app --reload       # http://localhost:8000 · docs at /docs</code></pre>
+    <p class="small">Optional: comment out <code>torch</code>/<code>transformers</code> for a lighter 2 GB-free start — the API boots with a keyword fallback and reports <code>model_loaded:false</code>.</p>
+    <h3>Start the frontend</h3>
+    <pre><code>npm install
+npm run dev                     # http://localhost:5173</code></pre>
+    <p class="small">Point the frontend at the backend if needed: create <code>.env.local</code> with <code>VITE_API_URL=http://localhost:8000</code> (defaults already match).</p>
+    <h3>Run the tests (no DB or model needed)</h3>
+    <pre><code>cd sahara-backend && .venv\Scripts\python tests\test_api.py
+npm run build</code></pre>
+  </section>
+
+  <!-- ================= 12 ================= -->
+  <section id="s12">
+    <h2><span class="num">12.</span> Architecture at a Glance</h2>
+    <p>Two independent codebases talk over HTTP/JSON with CORS and role-scoped JWTs:</p>
+    <pre><code>FRONTEND (React SPA)             BACKEND (FastAPI)
+ src/                       http  sahara-backend/
+ React 18 + Vite      ──────▶     Python 3.11 · uvicorn
+ Tailwind tokens             JSON Motor (async MongoDB)
+ Framer Motion        ◀──────   Pydantic v2 · MongoDB
+ React Router                                 Sahara DB
+ Recharts · Lucide                     XLM-RoBERTa · Claude</code></pre>
+    <p><strong>Core collections:</strong> <code>users</code>, <code>checkins</code>, <code>risk_assessments</code>, <code>alerts</code>, <code>caseworker_actions</code>, <code>chat_sessions</code>, <code>chat_logs</code>, <code>transcripts</code>, <code>audit_logs</code>.</p>
+    <p><strong>Data flow:</strong> Check-in / chat / transcript → scoring &amp; NLP services → MongoDB → distress engine + prioritisation → risk queue / summaries / chat flags → caseworker review → human follow-up (logged, never auto-cleared).</p>
+  </section>
+
+  <!-- ================= 13 ================= -->
+  <section id="s13">
+    <h2><span class="num">13.</span> Privacy, Ethics &amp; the "Human Decides" Rule</h2>
+    <ul>
+      <li><strong>Raw phone numbers never stored</strong> — only a <code>bcrypt</code> hash.</li>
+      <li><strong>API keys are server-side only</strong> — the Claude key lives in the backend, never the browser.</li>
+      <li><strong>Minimised dashboards</strong> — queues show case IDs, scores, and reasons, not private conversations; chat flags show keywords/sentiment, not transcripts.</li>
+      <li><strong>No protected characteristics as features</strong> — caste/religion/ethnicity are never inputs to the risk model.</li>
+      <li><strong>CORS locked</strong> to the frontend origins.</li>
+      <li><strong>Human-over-AI</strong> — the engine ranks, suggests, and flags; an authorised counsellor or caseworker decides and acts. Marking follow-up complete never auto-lowers a score.</li>
+    </ul>
+    <div class="callout green">
+      <h4>Honest labels everywhere</h4>
+      <p>"AI-assisted risk estimate. This is not a clinical diagnosis." "Prototype model — deployment would require validation, clinical oversight, bias assessment, security review, and government approval." Every number self-labels; the human is the last word.</p>
+    </div>
+  </section>
+
+  <!-- ================= 14 ================= -->
+  <section id="s14">
+    <h2><span class="num">14.</span> Honest Status: Real vs. Prototype</h2>
+    <table>
+      <tr><th>Area</th><th>Status</th></tr>
+      <tr><td>Auth + RBAC (JWT + bcrypt, scoped, audit log)</td><td><span class="badge b-real">Real &amp; working</span></td></tr>
+      <tr><td>Check-ins → history API &amp; 60-day chart</td><td><span class="badge b-real">Real</span></td></tr>
+      <tr><td>Distress engine + contributing factors</td><td><span class="badge b-real">Real</span></td></tr>
+      <tr><td>Crisis keywords → safe reply → alert/flag</td><td><span class="badge b-real">Real</span></td></tr>
+      <tr><td>Multilingual (en/hi/or) chat + human support</td><td><span class="badge b-real">Real</span></td></tr>
+      <tr><td>Caseworker risk queue + DEMO-042 timeline API</td><td><span class="badge b-real">Real</span></td></tr>
+      <tr><td>Admin aggregation + alert APIs (7 + 6)</td><td><span class="badge b-real">Real (backend)</span></td></tr>
+      <tr><td>339 automated backend tests</td><td><span class="badge b-real">Real</span></td></tr>
+      <tr><td>Sentiment — XLM-RoBERTa model live in this env</td><td><span class="badge b-part">Lexicon fallback active</span></td></tr>
+      <tr><td>Automatic check-in → risk → alert</td><td><span class="badge b-part">Manual / chat only now</span></td></tr>
+      <tr><td>/caseworker case detail</td><td><span class="badge b-part">Hardcoded DEMO-042</span></td></tr>
+      <tr><td>/command admin dashboard front-end</td><td><span class="badge b-mock">Mock data (backend real)</span></td></tr>
+      <tr><td>Marketing alert centre + statistics</td><td><span class="badge b-mock">Demo data</span></td></tr>
+    </table>
+    <div class="hr"></div>
+    <p class="small"><strong>Bottom line:</strong> the core safety loop — check-in &amp; chat → explainable risk signal → human-reviewed action, all under role-scoped, consent-based access — is built and tested. Government front-ends and a few automatic triggers remain demo/partial and are the documented next steps before production.</p>
+    <p class="small" style="margin-top:14px;">Sahara · सहारा · SIH26094 · Ministry of Social Justice &amp; Empowerment. "Hope Still Rises."</p>
+  </section>
+
+</div>
+</body>
+</html>

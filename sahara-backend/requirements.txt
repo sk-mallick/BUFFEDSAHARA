@@ -1,0 +1,46 @@
+# ============================================================================
+# Sahara backend — dependencies
+# Install with:  pip install -r requirements.txt
+#
+# Pinning note: floors (>=) rather than exact pins are used deliberately —
+# the API promises "Python 3.11+" and exact pins (e.g. numpy 1.26.4,
+# torch 2.5.1) have no wheels for Python 3.13/3.14. Floor pins let pip
+# resolve the newest version with wheels for YOUR interpreter, on 3.11–3.14.
+#
+# NOTE: torch/transformers are large (~2 GB installed). If you only want to
+# run the API with the lightweight offline sentiment fallback, comment out
+# the torch/transformers lines — the app boots fine without them
+# (model_loaded will report False and the heuristic fallback is used).
+# ============================================================================
+
+# --- Web framework ----------------------------------------------------------
+fastapi>=0.115.6
+uvicorn[standard]>=0.32.1
+
+# --- Database (async MongoDB driver) ----------------------------------------
+motor>=3.6.1
+
+# --- Validation & configuration ---------------------------------------------
+pydantic>=2.10.4
+pydantic-settings>=2.7.1
+python-dotenv>=1.0.1
+
+# --- Security ---------------------------------------------------------------
+bcrypt>=4.2.1
+PyJWT>=2.9.0   # HS256 access tokens for the auth/RBAC layer
+
+# --- Chat companion ----------------------------------------------------------
+anthropic>=0.25.0
+langdetect>=0.9.0   # best-effort EN/HI detection for chat metadata
+google-genai>=1.0.0  # free-tier Gemini provider for the chat companion
+
+# --- Numerics ----------------------------------------------------------------
+numpy>=2.1,<3
+
+# --- ML (sentiment model). Optional — see note above ------------------------
+# torch/transformers floor pins: newer Python versions need newer wheels,
+# and pip will resolve the newest compatible build automatically.
+torch>=2.5.1
+transformers>=4.46.0
+# (XLM-RoBERTa uses the fast tokenizer, so the separate `sentencepiece`
+# package is NOT required.)

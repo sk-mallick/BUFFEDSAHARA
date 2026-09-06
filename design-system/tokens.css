@@ -1,0 +1,245 @@
+/* ==========================================================================
+   SAHARA DESIGN TOKENS  ·  v1.0
+   "Calm Institutional Warmth" — government-grade credibility, human softness.
+   Canonical token source for plain-CSS / framework-agnostic use.
+   The Tailwind bridge lives in ./tailwind.config.js and MUST stay in sync
+   with this file (same values, same names).
+   ========================================================================== */
+
+:root {
+  /* ------------------------------------------------------------------
+     COLOR · Sand — warm neutral canvas (soft sand / off-white)
+     ------------------------------------------------------------------ */
+  --color-sand-50:  #FAF6EF;  /* page canvas                                   */
+  --color-sand-100: #F4EDE1;  /* raised surfaces on canvas, alt section fields */
+  --color-sand-200: #E9DFCE;  /* hairline borders, dividers                    */
+  --color-sand-300: #D8C9B0;  /* stronger borders, disabled fills              */
+  --color-sand-400: #C2B096;  /* decorative only — never text                   */
+
+  /* ------------------------------------------------------------------
+     COLOR · Ink — deep charcoal-navy text (never pure black; a quiet
+     nod to the Ashoka Chakra's navy)
+     ------------------------------------------------------------------ */
+  --color-ink-900: #1F2733;  /* headlines, primary text                        */
+  --color-ink-700: #3A4350;  /* body text                                      */
+  --color-ink-500: #66707C;  /* secondary / muted text (AA on white)           */
+  --color-ink-300: #98A0AA;  /* placeholders & disabled text ONLY — not AA      */
+  --color-ink-100: #D5DAE0;  /* disabled borders                                */
+
+  /* ------------------------------------------------------------------
+     COLOR · Marigold — the ONE primary (muted saffron-terracotta;
+     dried-marigold family). Used sparingly; ink does the heavy lifting.
+     ------------------------------------------------------------------ */
+  --color-marigold-50:  #FBF3EC;
+  --color-marigold-100: #F6E2D2;
+  --color-marigold-200: #EDC5A5;
+  --color-marigold-300: #E0A276;
+  --color-marigold-400: #D17F4E;
+  --color-marigold-500: #B85C33;  /* large accents, focus on light fields      */
+  --color-marigold-600: #9E4A26;  /* PRIMARY action bg, links (6.0:1 on white) */
+  --color-marigold-700: #823C20;  /* hover                                       */
+  --color-marigold-800: #652F1A;  /* pressed                                     */
+  --color-marigold-900: #472112;
+
+  /* ------------------------------------------------------------------
+     COLOR · Sage — secondary "safe / stable" green (calming moss)
+     ------------------------------------------------------------------ */
+  --color-sage-50:  #F1F5EE;
+  --color-sage-100: #E0E9DA;
+  --color-sage-200: #C3D3B7;
+  --color-sage-300: #A0B890;
+  --color-sage-400: #7E9D6C;
+  --color-sage-500: #648552;
+  --color-sage-600: #4E6A40;  /* safe-state text / icons (6.0:1 on white)      */
+  --color-sage-700: #3F5634;
+  --color-sage-800: #32442A;
+  --color-sage-900: #25311F;
+
+  /* ------------------------------------------------------------------
+     COLOR · Amber — soft "needs attention" (never harsh red on
+     victim-facing screens)
+     ------------------------------------------------------------------ */
+  --color-amber-50:  #FCF6E8;
+  --color-amber-100: #F7E8C6;
+  --color-amber-200: #EDD291;
+  --color-amber-300: #E0B75E;
+  --color-amber-400: #CF9A35;
+  --color-amber-500: #B37D22;
+  --color-amber-600: #93641A;  /* attention text on light (5.1:1 on white)     */
+  --color-amber-700: #754F15;
+  --color-amber-800: #5A3D12;
+
+  /* ------------------------------------------------------------------
+     COLOR · Critical — CASEWORKER DASHBOARD ONLY. Muted brick red for
+     internal critical alerts. Never used on public or portal surfaces.
+     ------------------------------------------------------------------ */
+  --color-critical-50:  #FBEFEC;
+  --color-critical-100: #F4DAD3;
+  --color-critical-200: #E6B3A5;
+  --color-critical-300: #D18770;
+  --color-critical-400: #B85F45;
+  --color-critical-500: #A0452D;
+  --color-critical-600: #863723;  /* alert text (AA on white)                  */
+  --color-critical-700: #6B2C1C;
+
+  --color-white: #FFFFFF;  /* cards raised on the sand canvas                  */
+
+  /* ------------------------------------------------------------------
+     TYPOGRAPHY · Families (see style-guide.md for the pairing rationale)
+     ------------------------------------------------------------------ */
+  --font-display: "Fraunces", "Noto Serif Devanagari", Georgia, "Times New Roman", serif;
+  --font-sans:    "Inter", "Noto Sans Devanagari", system-ui, "Segoe UI", sans-serif;
+  --font-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* ------------------------------------------------------------------
+     TYPOGRAPHY · Scale (16px root). Weights/leading per style-guide.md.
+     ------------------------------------------------------------------ */
+  --text-display:   3.5rem;  /* 56px — xl screens step up to 4.5rem */
+  --text-h1:        2.5rem;  /* 40px */
+  --text-h2:        2rem;    /* 32px */
+  --text-h3:        1.5rem;  /* 24px */
+  --text-h4:        1.25rem; /* 20px */
+  --text-body-lg:   1.125rem;/* 18px */
+  --text-body:      1rem;    /* 16px */
+  --text-small:     0.875rem;/* 14px */
+  --text-caption:   0.8125rem;/* 13px */
+  --text-eyebrow:   0.75rem; /* 12px — uppercase + 0.12em tracking */
+  --text-data:      0.875rem;/* 14px — mono numerals */
+
+  --leading-display: 1.04;
+  --leading-h1:      1.08;
+  --leading-h2:      1.15;
+  --leading-h3:      1.25;
+  --leading-h4:      1.3;
+  --leading-body-lg: 1.7;
+  --leading-body:    1.65;
+  --leading-small:   1.55;
+  --leading-caption: 1.45;
+  --leading-eyebrow: 1.4;
+
+  --tracking-display: -0.02em;
+  --tracking-h1:      -0.015em;
+  --tracking-h2:      -0.01em;
+  --tracking-eyebrow: 0.12em;
+
+  /* ------------------------------------------------------------------
+     SPACING · 8pt rhythm (4px allowed only as an internal half-step)
+     ------------------------------------------------------------------ */
+  --space-1: 0.25rem;  /* 4   — half-step: icon-to-label gaps only */
+  --space-2: 0.5rem;   /* 8    */
+  --space-3: 0.75rem;  /* 12   */
+  --space-4: 1rem;     /* 16   */
+  --space-5: 1.25rem;  /* 20   */
+  --space-6: 1.5rem;   /* 24   */
+  --space-8: 2rem;     /* 32   */
+  --space-10: 2.5rem;  /* 40   */
+  --space-12: 3rem;    /* 48   */
+  --space-16: 4rem;    /* 64   */
+  --space-20: 5rem;    /* 80   */
+  --space-24: 6rem;    /* 96   */
+  --space-32: 8rem;    /* 128  */
+
+  /* ------------------------------------------------------------------
+     LAYOUT · Containers & grid
+     ------------------------------------------------------------------ */
+  --container-public:    80rem;  /* 1280px — marketing site                  */
+  --container-narrow:    44rem;  /* 704px  — portal reading / forms (gentler) */
+  --container-dashboard: 88rem;  /* 1408px — caseworker work surface          */
+  --gutter-mobile: 1rem;         /* 16px                                     */
+  --gutter-tablet: 1.5rem;       /* 24px                                     */
+  --gutter-desktop: 2rem;        /* 32px                                     */
+
+  /* ------------------------------------------------------------------
+     RADIUS · considered defaults (not pill-everything, not sharp-everything)
+     ------------------------------------------------------------------ */
+  --radius-sm:   6px;   /* chips, small elements          */
+  --radius-md:   8px;   /* inputs, buttons, table cells   */
+  --radius-lg:   12px;  /* small cards, dropdowns         */
+  --radius-xl:   16px;  /* CARDS, panels                  */
+  --radius-2xl:  24px;  /* modals, large media frames     */
+  --radius-full: 9999px;/* badges, pills, avatars only    */
+
+  /* ------------------------------------------------------------------
+     ELEVATION · soft, low-contrast (ink-tinted, never harsh)
+     ------------------------------------------------------------------ */
+  --shadow-1: 0 1px 2px rgba(31, 39, 51, 0.05);
+  --shadow-2: 0 1px 2px rgba(31, 39, 51, 0.06), 0 2px 6px rgba(31, 39, 51, 0.05);
+  --shadow-3: 0 2px 4px rgba(31, 39, 51, 0.05), 0 8px 20px -4px rgba(31, 39, 51, 0.10);
+  --shadow-4: 0 4px 8px rgba(31, 39, 51, 0.06), 0 16px 36px -8px rgba(31, 39, 51, 0.14);
+  --shadow-5: 0 8px 16px rgba(31, 39, 51, 0.08), 0 28px 64px -12px rgba(31, 39, 51, 0.20);
+  --shadow-focus: 0 0 0 4px rgba(158, 74, 38, 0.15);  /* soft selection halo */
+
+  /* ------------------------------------------------------------------
+     MOTION · gentle & unhurried. No bounce, no springs, no gamified pops.
+     ------------------------------------------------------------------ */
+  --dur-micro:  100ms;  /* color/state feedback        */
+  --dur-fast:   160ms;  /* hover, small reveals        */
+  --dur-base:   240ms;  /* standard transitions        */
+  --dur-slow:   360ms;  /* overlays, panel slides      */
+  --dur-slower: 560ms;  /* page-level entrances        */
+
+  --ease-gentle: cubic-bezier(0.22, 1, 0.36, 1);   /* ease-out, decisive but soft */
+  --ease-soft:   cubic-bezier(0.45, 0, 0.25, 1);   /* ease-in-out, unhurried     */
+  --ease-calm:   cubic-bezier(0.83, 0, 0.17, 1);   /* near-linear, contemplative */
+}
+
+/* ==========================================================================
+   DEVARAGARI (Hindi) TUNING
+   Devanagari matras stack vertically: taller lines, zero negative tracking,
+   weight one step up (the script renders lighter than Latin).
+   Applied automatically when the document language is `hi`.
+   ========================================================================== */
+html[lang="hi"] {
+  --leading-display: 1.25;
+  --leading-h1: 1.3;
+  --leading-h2: 1.35;
+  --leading-body-lg: 1.75;
+  --leading-body: 1.75;
+}
+
+html[lang="hi"] .text-display,
+html[lang="hi"] .text-h1,
+html[lang="hi"] .text-h2,
+html[lang="hi"] .text-h3,
+html[lang="hi"] .text-h4 {
+  letter-spacing: 0;          /* never negative-track Devanagari */
+  font-weight: 600;           /* one step up from the Latin spec */
+}
+
+/* ==========================================================================
+   BASE BEHAVIOUR
+   ========================================================================== */
+::selection {
+  background: var(--color-marigold-100);
+  color: var(--color-ink-900);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-marigold-600);
+  outline-offset: 2px;
+}
+/* On marigold surfaces, invert the focus ring to ink for visibility. */
+.bg-marigold-600:focus-visible,
+.bg-marigold-700:focus-visible,
+.bg-marigold-800:focus-visible {
+  outline-color: var(--color-ink-900);
+}
+
+/* Soft selection halo for highlighted / selected states (cards, rows). */
+.ring-selected {
+  box-shadow: var(--shadow-focus);
+}
+
+/* ==========================================================================
+   MOTION PRINCIPLE ENFORCEMENT
+   Any animation that ships in Step 2 must respect this. Essential motion
+   (spinners, focus rings) may stay; decorative motion is removed.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

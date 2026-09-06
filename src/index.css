@@ -1,0 +1,225 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Hide the side scrollbar while keeping scrolling functional. */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE / Edge */
+  }
+  html::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+  html,
+  body {
+    overflow-x: hidden; /* Prevent horizontal overflow from parallax layers. */
+  }
+
+  /* Lucide global stroke (1.5px per iconography doctrine; 1.75 at 16px via
+     per-icon strokeWidth prop). */
+  :root {
+    --lucide-stroke-width: 1.5;
+
+    /* Chat companion accents — project primary by default (marigold).
+       To switch the chat to teal (#1D9E75), change these four lines. */
+    --chat-primary: var(--color-marigold-600);
+    --chat-primary-hover: var(--color-marigold-700);
+    --chat-user-bubble: var(--color-marigold-600);
+    --chat-bot-bubble: var(--color-sand-50);
+  }
+
+  body {
+    background-color: var(--color-sand-50);
+    color: var(--color-ink-900);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    color: var(--color-ink-900);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+@layer components {
+  /* Page shell — container widths per the layout tokens. */
+  .shell {
+    @apply mx-auto w-full max-w-public px-4 md:px-8;
+  }
+
+  /* Narrow, gentler column for reading / forms (portal register). */
+  .shell-narrow {
+    @apply mx-auto w-full max-w-narrow px-4 md:px-6;
+  }
+
+  /* Section eyebrow label. */
+  .eyebrow-text {
+    @apply text-eyebrow uppercase text-marigold-600;
+  }
+
+  /* Standard card: white on sand, hairline + whisper shadow, 16px corners. */
+  .card {
+    @apply rounded-xl border border-sand-200 bg-white p-6 shadow-1;
+  }
+
+  /* Badge base (F7) — variants set bg/text/border per tone. */
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-caption font-medium;
+  }
+  .badge-neutral {
+    @apply badge border-sand-200 bg-sand-100 text-ink-700;
+  }
+  .badge-sage {
+    @apply badge border-sage-200 bg-sage-50 text-sage-600;
+  }
+  .badge-amber {
+    @apply badge border-amber-200 bg-amber-50 text-amber-600;
+  }
+
+  /* Warm card hover: gentle rise + deeper soft shadow (150–250ms tokens). */
+  .card-lift {
+    @apply transition-all duration-base ease-gentle hover:-translate-y-1 hover:shadow-3;
+  }
+  .card-lift-sm {
+    @apply transition-all duration-base ease-gentle hover:-translate-y-0.5 hover:shadow-2;
+  }
+
+  /* Animated underline for text links — draws left to right on hover. */
+  .underline-draw {
+    position: relative;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1.5px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition: background-size var(--dur-base) var(--ease-gentle);
+  }
+  .underline-draw:hover,
+  .underline-draw:focus-visible {
+    background-size: 100% 1.5px;
+  }
+
+  /* Branded skeleton shimmer — warm sand, never default gray. */
+  .skeleton {
+    background-image: linear-gradient(
+      100deg,
+      var(--color-sand-200) 40%,
+      var(--color-sand-100) 50%,
+      var(--color-sand-200) 60%
+    );
+    background-size: 200% 100%;
+  }
+
+  /* Calm loading spinner inside buttons — inherits text colour, no layout shift. */
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .btn-spinner {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 9999px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    opacity: 0.75;
+    animation: spin 0.9s linear infinite;
+  }
+
+  /* Chat trigger pulse — a gentle expanding ring to draw the eye calmly.
+     Decorative: removed under prefers-reduced-motion. */
+  @keyframes chat-pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(184, 92, 51, 0.35);
+    }
+    70% {
+      box-shadow: 0 0 0 14px rgba(184, 92, 51, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(184, 92, 51, 0);
+    }
+  }
+  .chat-pulse {
+    animation: chat-pulse 2.8s var(--ease-gentle) infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chat-pulse {
+      animation: none;
+    }
+  }
+
+  /* Carousel progress fill — runs the length of one slide, then resets. */
+  @keyframes carousel-progress {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+  .carousel-progress {
+    animation: carousel-progress 6.5s linear forwards;
+  }
+
+  /* Long-form prose for charter / about pages. */
+  .prose-sahara h3 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--color-ink-900);
+    margin-top: 2.5rem;
+  }
+  .prose-sahara p {
+    margin-top: 1rem;
+    color: var(--color-ink-700);
+    max-width: 65ch;
+  }
+  .prose-sahara ul {
+    margin-top: 1rem;
+    list-style: none;
+  }
+  .prose-sahara li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-top: 0.5rem;
+    color: var(--color-ink-700);
+    max-width: 65ch;
+  }
+  .prose-sahara li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-marigold-600);
+  }
+  .prose-sahara a {
+    color: var(--color-marigold-600);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .prose-sahara a:hover {
+    color: var(--color-marigold-700);
+  }
+  .prose-sahara .eyebrow-text {
+    margin-top: 0;
+  }
+}
