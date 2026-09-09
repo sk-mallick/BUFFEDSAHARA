@@ -24,6 +24,8 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY vite.config.js index.html tailwind.config.js postcss.config.js ./
+# tokens.css is imported by src/main.jsx — must be in the build context.
+COPY design-system ./design-system
 COPY public ./public
 COPY src ./src
 # Same-origin: leave VITE_API_URL unset so the app calls its own origin.
