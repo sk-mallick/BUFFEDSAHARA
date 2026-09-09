@@ -5,7 +5,10 @@
 // only exists so requests carry the session and errors surface cleanly.
 // ============================================================================
 
-const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:8000").replace(/\/$/, "");
+// Same-origin by default: on Render the FastAPI app serves BOTH this SPA
+// and the API from one URL, so no VITE_API_URL is needed in production.
+// Local dev keeps the Vite dev server on :5173 and the API on :8000.
+const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 
 let _token = null;
 let _onUnauthorized = null;

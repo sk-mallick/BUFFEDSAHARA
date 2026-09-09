@@ -14,7 +14,9 @@ import { useState } from "react";
  * bot and the API are always in step.
  */
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+// Same-origin by default (see src/lib/api.js) — one Render URL serves
+// the SPA and the API together. Set VITE_API_URL only for local dev.
+const API_URL = import.meta.env.VITE_API_URL || "";
 
 const WELCOME = {
   id: "welcome",

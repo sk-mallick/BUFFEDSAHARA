@@ -22,6 +22,9 @@ const en = {
     exit: "Exit",
     signIn: "Portal sign in",
     signOut: "Sign out",
+    mySpace: "My Space",
+    talkToSahara: "Talk to Sahara",
+    dashboard: "Dashboard",
   },
   hero: {
     eyebrow: "Ministry of Social Justice & Empowerment · Smart India Hackathon 2026",
@@ -176,6 +179,9 @@ const hi = {
     signIn: "पोर्टल साइन इन",
     signOut: "साइन आउट",
     exit: "बाहर निकलें",
+    mySpace: "मेरा स्थान",
+    talkToSahara: "सहारा से बात करें",
+    dashboard: "डैशबोर्ड",
   },
   hero: {
     eyebrow: "सामाजिक न्याय और अधिकारिता मंत्रालय · स्मार्ट इंडिया हैकाथॉन 2026",

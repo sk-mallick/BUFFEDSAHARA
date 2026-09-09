@@ -250,7 +250,7 @@ export default function Hero() {
           </motion.p>
 
           <motion.div  className="mt-8 flex flex-wrap items-center gap-4">
-            <Button to="/for-victims" size="lg" className="rounded-full px-7">
+            <Button to="/talk" size="lg" className="rounded-full px-7">
               {t("hero.cta1")}
               <ArrowRight size={16} aria-hidden="true" />
             </Button>

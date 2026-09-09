@@ -1,0 +1,38 @@
+# ============================================================================
+# Render Blueprint — ONE web service for the whole Sahara app.
+#
+# Deploy with:  Render dashboard → New → Blueprint → pick this repo
+# (or:  render.yaml detected automatically on repo push).
+#
+# The Dockerfile builds the Vite SPA and the FastAPI app serves it, so the
+# browser talks to ONE origin — no CORS juggling, no separate Vercel deploy.
+#
+# Secrets (MONGODB_URL, AUTH_SECRET, API keys) are set in the Render
+# dashboard — never commit them here. `sync: false` marks them as
+# dashboard-managed so the blueprint stays safe for a public repo.
+# ============================================================================
+
+services:
+  - type: web
+    name: sahara-app
+    runtime: docker
+    plan: starter          # smallest paid plan; use "free" for demos (cold starts)
+    healthCheckPath: /api/health
+    autoDeploy: true       # deploy on every git push
+    envVars:
+      - key: MONGODB_URL
+        sync: false        # set in dashboard: mongodb+srv://… (Atlas)
+      - key: DB_NAME
+        value: sahara_db
+      - key: AUTH_SECRET
+        sync: false        # set in dashboard: long random string (JWT signing)
+      - key: AUTH_ENFORCED
+        value: "true"
+      - key: CORS_ORIGINS
+        value: https://sahara-app.onrender.com   # adjust to your actual URL
+      - key: GEMINI_API_KEY
+        sync: false        # optional — real chatbot AI (free tier available)
+      - key: ANTHROPIC_API_KEY
+        sync: false        # optional — Claude provider
+      - key: MOCK_AI_MODE
+        value: "false"

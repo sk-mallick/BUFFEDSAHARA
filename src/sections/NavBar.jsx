@@ -6,7 +6,7 @@ import ArchMark from "../components/ArchMark";
 import LangSwitcher from "../components/LangSwitcher";
 import ExitButton from "../components/ExitButton";
 import { useLang } from "../lib/i18n";
-import { useAuth } from "../lib/auth";
+import { useAuth, isStaffRole } from "../lib/auth";
 import cn from "../lib/cn";
 
 const roleLabel = {
@@ -100,10 +100,29 @@ function HelplinePill({ className }) {
 
 export default function NavBar() {
   const { t } = useLang();
+  const { user, status } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const reduce = useReducedMotion();
+
+  // Conditional nav links for logged-in users
+  const loggedinLinks = (() => {
+    if (status !== "authed" || !user) return [];
+    if (user.role === "beneficiary") {
+      return [
+        { to: "/beneficiary", labelKey: "nav.mySpace" },
+        { to: "/talk", labelKey: "nav.talkToSahara" },
+      ];
+    }
+    if (isStaffRole(user.role)) {
+      const dashLink = user.role === "caseworker"
+        ? "/caseworker"
+        : "/command";
+      return [{ to: dashLink, labelKey: "nav.dashboard" }];
+    }
+    return [];
+  })();
 
   // Over the cinematic hero (home, top of page) the transparent nav sits on a
   // bright sky — inactive links need full ink + a soft halo to stay legible.
@@ -143,6 +162,22 @@ export default function NavBar() {
           </Link>
 
           <nav aria-label="Primary" className="hidden items-center gap-6 lg:flex">
+            {loggedinLinks.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                className={({ isActive }) =>
+                  cn(
+                    "relative py-2 text-small font-medium transition-colors duration-fast ease-soft after:absolute after:-bottom-0.5 after:left-0 after:h-0.5 after:rounded-full after:bg-marigold-600 after:transition-all after:duration-fast after:ease-soft",
+                    isActive
+                      ? "text-marigold-700 font-semibold after:w-full"
+                      : "text-ink-500 hover:text-ink-900 after:w-0 hover:after:w-full"
+                  )
+                }
+              >
+                {t(link.labelKey)}
+              </NavLink>
+            ))}
             {navLinks.map((link) => (
               <NavLink
                 key={link.to}
@@ -171,7 +206,7 @@ export default function NavBar() {
             <HelplinePill className="hidden md:inline-flex" />
             <AuthControl className="hidden lg:inline-flex" />
             <LangSwitcher className="hidden lg:inline-flex" />
-            <ExitButton className="hidden lg:inline-flex" />
+            <ExitButton />
             <button
               type="button"
               onClick={() => setOpen(!open)}
@@ -198,6 +233,30 @@ export default function NavBar() {
             className="fixed inset-0 top-16 z-drawer flex flex-col overflow-y-auto bg-sand-50 md:top-20 lg:hidden"
           >
             <nav aria-label="Mobile" className="shell flex flex-1 flex-col py-8">
+              {loggedinLinks.length > 0 && (
+                <ul className="mb-4 space-y-1">
+                  {loggedinLinks.map((link, i) => (
+                    <motion.li
+                      key={link.to}
+                      initial={reduce ? false : { opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1], delay: i * 0.05 }}
+                    >
+                      <NavLink
+                        to={link.to}
+                        className={({ isActive }) =>
+                          cn(
+                            "block border-b border-sand-200 py-4 font-display text-3xl font-medium transition-colors duration-fast ease-soft",
+                            isActive ? "text-marigold-600" : "text-ink-900"
+                          )
+                        }
+                      >
+                        {t(link.labelKey)}
+                      </NavLink>
+                    </motion.li>
+                  ))}
+                </ul>
+              )}
               <ul className="space-y-1">
                 {navLinks.map((link, i) => (
                   <motion.li

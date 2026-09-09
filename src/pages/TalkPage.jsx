@@ -148,7 +148,7 @@ export default function TalkPage() {
     if (el) el.scrollTo({ top: el.scrollHeight, behavior: reduce ? "auto" : "smooth" });
   }, [reduce]);
 
-  useEffect(scrollDown, [state.messages, typing, crisis, scrollDown]);
+  useEffect(scrollDown, [state.messages, typing, crisis, checkinStage, scrollDown]);
 
   const openSession = useCallback(
     async (preferredLang) => {
@@ -386,6 +386,30 @@ export default function TalkPage() {
             </p>
           )}
 
+          {/* Persistent crisis banner — always visible at top when active */}
+          {crisis && state.status === "ready" && (
+            <div
+              role="alert"
+              className="mt-6 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3"
+            >
+              <p className="flex items-center gap-2 text-small font-semibold text-amber-900">
+                <Phone size={15} aria-hidden="true" />
+                {crisis.ack}
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {(crisis.numbers || []).map((n) => (
+                  <a
+                    key={n.number}
+                    href={`tel:${n.number}`}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-small font-semibold text-ink-900 ring-1 ring-amber-300 transition-colors hover:ring-amber-500"
+                  >
+                    <Phone size={12} aria-hidden="true" /> {n.number}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Chat card */}
           <div className="mt-6 overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-1">
             <div className="flex items-center justify-between gap-3 border-b border-sand-200 bg-sand-50 px-5 py-3">
@@ -478,7 +502,12 @@ export default function TalkPage() {
 
               {/* Guided check-in quick answers */}
               {checkinOpts && !typing && (
-                <div className="flex flex-wrap gap-2" role="group" aria-label="Quick answers">
+                <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Quick answers">
+                  {checkinOpts.kind === "scale" && checkinOpts.labels?.[lang] && (
+                    <span className="text-caption font-medium text-ink-500 mr-1">
+                      {checkinOpts.labels[lang].low}
+                    </span>
+                  )}
                   {(checkinOpts.kind === "scale" ? checkinOpts.options : checkinOpts.options[lang] || []).map(
                     (opt) => (
                       <button
@@ -490,6 +519,11 @@ export default function TalkPage() {
                         {opt}
                       </button>
                     )
+                  )}
+                  {checkinOpts.kind === "scale" && checkinOpts.labels?.[lang] && (
+                    <span className="text-caption font-medium text-ink-500 ml-1">
+                      {checkinOpts.labels[lang].high}
+                    </span>
                   )}
                 </div>
               )}

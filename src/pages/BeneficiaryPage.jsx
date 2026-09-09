@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { HeartHandshake, Loader2, LockKeyhole, ShieldCheck, Sparkles } from "lucide-react";
+import { HeartHandshake, Loader2, LockKeyhole, ShieldCheck, Sparkles, X } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import StatusBadge from "../components/StatusBadge";
 import Sparkline from "../components/Sparkline";
@@ -12,12 +12,30 @@ import CalmCorner from "../components/calm/CalmCorner";
 
 const badgeLevel = (level) => (level === "needs_attention" ? "attention" : level);
 
+const ONBOARDING_KEY = "sahara.onboarded";
+
 export default function BeneficiaryPage() {
   const { user } = useAuth();
   const [history, setHistory] = useState(null);
   const [error, setError] = useState("");
   const [probe, setProbe] = useState(null);
   const [probing, setProbing] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(() => {
+    try {
+      return !localStorage.getItem(ONBOARDING_KEY);
+    } catch {
+      return false;
+    }
+  });
+
+  const dismissOnboarding = () => {
+    setShowOnboarding(false);
+    try {
+      localStorage.setItem(ONBOARDING_KEY, "1");
+    } catch {
+      /* private mode */
+    }
+  };
 
   const load = useCallback(async () => {
     setError("");
@@ -68,6 +86,54 @@ export default function BeneficiaryPage() {
 
       <section className="bg-sand-50 pb-20">
         <div className="shell pt-10">
+          {/* First-time onboarding — simple 3-step welcome */}
+          {showOnboarding && (
+            <div className="mb-6 rounded-2xl border border-sage-200 bg-sage-50 p-5">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="font-display text-h4 font-semibold text-ink-900">Welcome to your space</p>
+                  <p className="mt-2 text-small leading-relaxed text-ink-700">
+                    This is your private area. Here is what you can do:
+                  </p>
+                  <ol className="mt-3 space-y-2 text-small text-ink-700">
+                    <li className="flex items-start gap-2">
+                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-600 text-[11px] font-bold text-white">1</span>
+                      <span><strong>Talk to Sahara</strong> — share how you are feeling, in English, हिंदी or ଓଡ଼ିଆ</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-600 text-[11px] font-bold text-white">2</span>
+                      <span><strong>Complete a check-in</strong> — your wellbeing trend will appear here</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-600 text-[11px] font-bold text-white">3</span>
+                      <span><strong>You are always in control</strong> — exit anytime, delete your conversation anytime</span>
+                    </li>
+                  </ol>
+                </div>
+                <button
+                  type="button"
+                  onClick={dismissOnboarding}
+                  className="shrink-0 rounded-md p-1.5 text-ink-400 transition-colors hover:bg-sage-100 hover:text-ink-700"
+                  aria-label="Dismiss welcome message"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <Button to="/talk" variant="primary" size="sm">
+                  Talk to Sahara
+                </Button>
+                <button
+                  type="button"
+                  onClick={dismissOnboarding}
+                  className="text-small font-medium text-ink-500 hover:text-ink-700"
+                >
+                  I will explore on my own
+                </button>
+              </div>
+            </div>
+          )}
+
           {error && (
             <p role="alert" className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-small text-amber-800">
               {error}
@@ -116,13 +182,8 @@ export default function BeneficiaryPage() {
                   <div className="flex items-end justify-between gap-3">
                     <div>
                       <p className="text-caption uppercase tracking-wider text-ink-500">Latest check-in</p>
-                      <p className="mt-1 font-display text-3xl font-semibold text-ink-900">
-                        {latest.distress_score}
-                        <span className="text-lg text-ink-400">/100</span>
-                      </p>
-                      <p className="text-caption text-ink-500">distress score</p>
+                      <StatusBadge level={badgeLevel(latest.risk_level)} className="mt-2" />
                     </div>
-                    <StatusBadge level={badgeLevel(latest.risk_level)} />
                   </div>
                   <div>
                     <p className="text-caption uppercase tracking-wider text-ink-500">Over your check-ins</p>
@@ -170,9 +231,6 @@ export default function BeneficiaryPage() {
                   <li key={h.checkin_id} className="flex flex-wrap items-center gap-x-4 gap-y-1 py-3">
                     <time className="w-24 shrink-0 font-mono text-caption text-ink-500">{h.date}</time>
                     <StatusBadge level={badgeLevel(h.risk_level)} size="sm" />
-                    <span className="font-mono text-small text-ink-900">
-                      {h.distress_score}<span className="text-ink-400">/100</span>
-                    </span>
                   </li>
                 ))}
               </ul>

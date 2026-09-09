@@ -98,8 +98,24 @@ export const copy = (lang, key) => COPY[lang]?.[key] ?? COPY.en[key] ?? key;
 // Quick-answer options for the guided check-in, localised.
 // Keep these in sync with the backend parsers in routers/chat.py.
 export const CHECKIN_OPTIONS = {
-  mood: { kind: "scale", options: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"] },
-  sleep: { kind: "scale", options: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"] },
+  mood: {
+    kind: "scale",
+    options: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+    labels: {
+      en: { low: "Fine", high: "Very difficult" },
+      hi: { low: "ठीक हूँ", high: "बहुत मुश्किल" },
+      or: { low: "ଭଲ ଅଛି", high: "ବହୁତ କଷ୍ଟକର" },
+    },
+  },
+  sleep: {
+    kind: "scale",
+    options: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+    labels: {
+      en: { low: "Slept well", high: "Barely slept" },
+      hi: { low: "अच्छी नींद आई", high: "बिल्कुल नींद नहीं आई" },
+      or: { low: "ଭଲ ଶୋଇଥିଲି", high: "ପ୍ରାୟ ଶୋଇ ନଥିଲି" },
+    },
+  },
   safe: {
     kind: "pick",
     options: {
