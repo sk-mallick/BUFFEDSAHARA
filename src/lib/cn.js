@@ -1,4 +1,1 @@
-/** Join truthy class names — small, dependency-free. */
-export default function cn(...parts) {
-  return parts.filter(Boolean).join(" ");
-}
+export { cn as default, cn } from "./utils";

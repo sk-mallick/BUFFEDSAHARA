@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, Check, Github, Linkedin, Phone, Twitter } from "lucide-react";
+import { ArrowRight, Check, Phone } from "lucide-react";
 import ArchMark from "../components/ArchMark";
 import LangSwitcher from "../components/LangSwitcher";
 import { useLang } from "../lib/i18n";
@@ -23,12 +23,9 @@ const columns = [
       { to: "/about", labelKey: "footer.about" },
       { to: "/resources", labelKey: "nav.resources" },
       { to: "/contact", labelKey: "nav.contact" },
+      { to: "/privacy", labelKey: "footer.privacy" },
       { to: "/privacy#accessibility", labelKey: "footer.accessibility" },
     ],
-  },
-  {
-    titleKey: "footer.legal",
-    links: [{ to: "/privacy", labelKey: "footer.privacy" }],
   },
 ];
 
@@ -57,14 +54,14 @@ export default function Footer() {
       <div className="border-b border-white/10">
         <div className="shell flex flex-col items-center gap-4 py-8 md:flex-row md:justify-between">
           <p className="inline-flex items-center gap-3 text-small text-sand-100">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-600/90 text-white">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-600/90 text-white shadow-xs">
               <Phone size={16} aria-hidden="true" />
             </span>
             <span>
               <span className="block text-caption uppercase tracking-wider text-sand-300">
                 {t("footer.helpline")}
               </span>
-              <a href="tel:14566" className="font-mono text-xl font-medium text-white hover:text-amber-200">
+              <a href="tel:14566" className="font-mono text-xl font-medium text-white transition-colors hover:text-amber-200">
                 14566
               </a>
             </span>
@@ -73,7 +70,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="shell grid gap-12 py-14 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-8">
+      <div className="shell grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.3fr_0.9fr_1.1fr_1.3fr] lg:gap-8">
         {/* Brand */}
         <div className="max-w-sm">
           <Link to="/" className="inline-flex items-center gap-2.5" aria-label="Sahara — home">
@@ -83,23 +80,9 @@ export default function Footer() {
             </span>
           </Link>
           <p className="mt-4 text-small leading-relaxed text-sand-200">{t("footer.tagline")}</p>
-
-          <div className="mt-6 flex items-center gap-2">
-            {[
-              { icon: Twitter, label: "Sahara on X (Twitter)" },
-              { icon: Linkedin, label: "Sahara on LinkedIn" },
-              { icon: Github, label: "Sahara on GitHub" },
-            ].map(({ icon: Icon, label }) => (
-              <a
-                key={label}
-                href="#"
-                onClick={(e) => e.preventDefault()}
-                aria-label={label}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-sand-200 transition-colors duration-fast ease-soft hover:border-marigold-300 hover:text-marigold-300"
-              >
-                <Icon size={16} aria-hidden="true" />
-              </a>
-            ))}
+          <div className="mt-6 flex items-center gap-2.5 text-caption text-sand-300">
+            <span className="inline-block h-2 w-2 rounded-full bg-sage-400" aria-hidden="true" />
+            <span>DPDP Act 2023 Aligned · Encrypted & Confidential</span>
           </div>
         </div>
 
@@ -114,7 +97,7 @@ export default function Footer() {
                 <li key={link.labelKey}>
                   <Link
                     to={link.to}
-                    className="text-small text-sand-100 transition-colors duration-fast ease-soft hover:text-white hover:underline underline-offset-4"
+                    className="text-small text-sand-100 underline-offset-4 transition-colors duration-fast ease-soft hover:text-white hover:underline"
                   >
                     {t(link.labelKey)}
                   </Link>

@@ -5,6 +5,7 @@ import cn from "../../lib/cn";
 import MessageBubble from "./MessageBubble";
 import TypingIndicator from "./TypingIndicator";
 import CrisisBanner from "./CrisisBanner";
+import VoiceInputControl from "../media/VoiceInputControl";
 
 const PLACEHOLDER = { en: "Type a message…", hi: "संदेश लिखें…" };
 
@@ -141,6 +142,14 @@ export default function ChatWindow({
           onChange={(e) => setDraft(e.target.value)}
           placeholder={PLACEHOLDER[language]}
           className="min-w-0 flex-1 rounded-md border border-sand-300 bg-white px-3 py-2 text-small text-ink-900 placeholder:text-ink-300 focus:border-marigold-600 focus:outline-none focus:ring-[3px] focus:ring-marigold-600/15"
+        />
+        <VoiceInputControl
+          lang={language}
+          onTranscript={(text) => {
+            setDraft((prev) => (prev ? `${prev} ${text}` : text));
+            inputRef.current?.focus();
+          }}
+          disabled={isLoading}
         />
         <button
           type="submit"

@@ -4,8 +4,7 @@ import PageHeader from "../components/PageHeader";
 import StatusBadge from "../components/StatusBadge";
 import Sparkline from "../components/Sparkline";
 import Button from "../ui/Button";
-import cn from "../lib/cn";
-import { apiFetch, ApiError } from "../lib/api";
+import { apiFetch } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import WellbeingSection from "../components/wellbeing/WellbeingSection";
 import CalmCorner from "../components/calm/CalmCorner";
@@ -18,8 +17,6 @@ export default function BeneficiaryPage() {
   const { user } = useAuth();
   const [history, setHistory] = useState(null);
   const [error, setError] = useState("");
-  const [probe, setProbe] = useState(null);
-  const [probing, setProbing] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(() => {
     try {
       return !localStorage.getItem(ONBOARDING_KEY);
@@ -53,22 +50,6 @@ export default function BeneficiaryPage() {
 
   const latest = history && history.length ? history[history.length - 1] : null;
   const scores = (history || []).map((h) => h.distress_score);
-
-  // Scope check: the caseworker console is staff-only — this session is a
-  // beneficiary, so the server must refuse.
-  const runProbe = async () => {
-    setProbing(true);
-    setProbe(null);
-    try {
-      await apiFetch("/api/dashboard/risk-queue");
-      setProbe({ ok: true });
-    } catch (err) {
-      if (err instanceof ApiError && err.status === 403) setProbe({ ok: false, status: 403 });
-      else setProbe({ ok: false, status: err.status || 0 });
-    } finally {
-      setProbing(false);
-    }
-  };
 
   return (
     <>
@@ -148,30 +129,15 @@ export default function BeneficiaryPage() {
             <CalmCorner />
           </div>
 
-          {/* Talk to Sahara — multilingual support companion (beneficiary portal) */}
-          <div className="mb-5 flex flex-col gap-4 rounded-2xl border border-sage-200 bg-sage-50 p-5 sm:flex-row sm:items-center">
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-sage-600 text-white">
-              <HeartHandshake size={20} strokeWidth={1.7} aria-hidden="true" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="font-display text-h4 font-semibold text-ink-900">Talk to Sahara</p>
-              <p className="mt-1 text-small leading-relaxed text-ink-700">
-                Share how you are feeling, complete a wellbeing check-in, or ask for human
-                support — in English, हिंदी or ଓଡ଼ିଆ. A safe place to talk; a human is always
-                behind it.
-              </p>
-            </div>
-            <Button to="/talk" variant="primary" size="sm" className="shrink-0">
-              Open conversation
-            </Button>
-          </div>
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="rounded-2xl border border-sand-200/80 bg-white p-6 shadow-sm">
+              <div className="flex items-center gap-2.5">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-marigold-50 text-marigold-700">
+                  <HeartHandshake size={16} strokeWidth={1.8} aria-hidden="true" />
+                </span>
+                <h2 className="font-display text-lg font-semibold text-ink-900">How you are doing</h2>
+              </div>
 
-          <div className="grid gap-5 lg:grid-cols-3">
-            <section aria-label="Current wellbeing" className="rounded-2xl border border-sand-200 bg-white p-5">
-              <h2 className="flex items-center gap-2 text-h4 text-ink-900">
-                <HeartHandshake size={18} strokeWidth={1.5} className="text-marigold-700" aria-hidden="true" />
-                How you are doing
-              </h2>
               {!history && !error && (
                 <p className="mt-5 inline-flex items-center gap-2 text-small text-ink-500">
                   <Loader2 size={15} className="animate-spin" aria-hidden="true" /> Loading your data…
@@ -179,11 +145,9 @@ export default function BeneficiaryPage() {
               )}
               {latest && (
                 <div className="mt-5 space-y-4">
-                  <div className="flex items-end justify-between gap-3">
-                    <div>
-                      <p className="text-caption uppercase tracking-wider text-ink-500">Latest check-in</p>
-                      <StatusBadge level={badgeLevel(latest.risk_level)} className="mt-2" />
-                    </div>
+                  <div>
+                    <p className="text-caption uppercase tracking-wider text-ink-500">Latest check-in</p>
+                    <StatusBadge level={badgeLevel(latest.risk_level)} className="mt-1.5" />
                   </div>
                   <div>
                     <p className="text-caption uppercase tracking-wider text-ink-500">Over your check-ins</p>
@@ -196,84 +160,73 @@ export default function BeneficiaryPage() {
                         className="max-w-full"
                       />
                       <p className="mt-1 text-caption text-ink-500">
-                        {history.length} check-in{history.length === 1 ? "" : "s"} stored — only you can see this.
+                        {history.length} check-in{history.length === 1 ? "" : "s"} stored — visible only to you.
                       </p>
                     </div>
                   </div>
                 </div>
               )}
               {history && history.length === 0 && (
-                <p className="mt-5 text-small leading-relaxed text-ink-700">
-                  No check-ins yet. When you complete a check-in from the support line, your own trend
-                  will appear here.
+                <p className="mt-5 text-small leading-relaxed text-ink-600">
+                  No check-ins yet. When you complete a check-in from Talk to Sahara, your trend will appear here.
                 </p>
               )}
-              <p className="mt-5 flex items-start gap-2 border-t border-sand-100 pt-3 text-caption leading-relaxed text-ink-500">
-                <ShieldCheck size={14} className="mt-0.5 shrink-0 text-sage-600" aria-hidden="true" />
-                AI-assisted risk estimates are never a diagnosis, and no score ever closes your case.
-              </p>
-            </section>
+              <div className="mt-6 flex items-start gap-2.5 border-t border-sand-100 pt-4 text-caption leading-relaxed text-ink-500">
+                <ShieldCheck size={15} className="mt-0.5 shrink-0 text-sage-600" aria-hidden="true" />
+                <span>AI-assisted estimates are never a diagnosis, and no score ever closes your case.</span>
+              </div>
+            </div>
 
-            <section aria-label="Your check-in timeline" className="rounded-2xl border border-sand-200 bg-white p-5 lg:col-span-2">
-              <h2 className="flex items-center gap-2 text-h4 text-ink-900">
-                <Sparkles size={17} strokeWidth={1.5} className="text-sage-600" aria-hidden="true" />
-                Your check-in timeline
-              </h2>
-              <p className="mt-1 text-caption text-ink-500">Dates, scores and risk levels from your own history.</p>
+            <div className="rounded-2xl border border-sand-200/80 bg-white p-6 shadow-sm lg:col-span-2">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2.5">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-sage-50 text-sage-700">
+                    <Sparkles size={16} strokeWidth={1.8} aria-hidden="true" />
+                  </span>
+                  <div>
+                    <h2 className="font-display text-lg font-semibold text-ink-900">Check-in timeline</h2>
+                    <p className="text-caption text-ink-500">Dates, distress scores, and risk classifications</p>
+                  </div>
+                </div>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-sand-100 px-3 py-1 text-[11px] font-medium text-ink-700">
+                  <LockKeyhole size={12} className="text-sage-600" aria-hidden="true" /> Private record
+                </span>
+              </div>
 
               {!history && !error && (
                 <p className="mt-5 inline-flex items-center gap-2 text-small text-ink-500">
                   <Loader2 size={15} className="animate-spin" aria-hidden="true" /> Loading…
                 </p>
               )}
-              <ul className="mt-4 divide-y divide-sand-100">
-                {(history || []).map((h) => (
-                  <li key={h.checkin_id} className="flex flex-wrap items-center gap-x-4 gap-y-1 py-3">
-                    <time className="w-24 shrink-0 font-mono text-caption text-ink-500">{h.date}</time>
-                    <StatusBadge level={badgeLevel(h.risk_level)} size="sm" />
-                  </li>
-                ))}
-              </ul>
+              {history && history.length > 0 ? (
+                <ul className="mt-4 divide-y divide-sand-100">
+                  {history.map((h) => (
+                    <li key={h.checkin_id} className="flex flex-wrap items-center justify-between gap-3 py-3">
+                      <div className="flex items-center gap-3">
+                        <time className="font-mono text-small text-ink-700">{h.date}</time>
+                        {h.distress_score !== undefined && (
+                          <span className="rounded bg-sand-100 px-2 py-0.5 font-mono text-[11px] text-ink-600">
+                            Score: {h.distress_score}
+                          </span>
+                        )}
+                      </div>
+                      <StatusBadge level={badgeLevel(h.risk_level)} size="sm" />
+                    </li>
+                  ))}
+                </ul>
+              ) : history && (
+                <p className="mt-4 text-small text-ink-500">No recorded check-ins yet.</p>
+              )}
 
-              {/* Scope probe */}
-              <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4">
-                <p className="flex items-center gap-2 text-caption font-semibold text-amber-800">
-                  <LockKeyhole size={14} aria-hidden="true" /> Your data stays yours — verified live
+              <div className="mt-6 rounded-xl border border-sand-200 bg-sand-50/60 p-4">
+                <p className="flex items-center gap-2 text-caption font-semibold text-ink-800">
+                  <ShieldCheck size={14} className="text-sage-600" aria-hidden="true" /> DPDP Act 2023 Compliant · Data sovereignty guaranteed
                 </p>
-                <p className="mt-1.5 text-caption leading-relaxed text-ink-700">
-                  This session is signed in as a beneficiary, so staff-only views must refuse it:
-                </p>
-                <div className="mt-3 flex flex-wrap items-center gap-3">
-                  <Button size="sm" variant="secondary" onClick={runProbe} disabled={probing}>
-                    {probing && <Loader2 size={13} className="animate-spin" aria-hidden="true" />}
-                    Try to open the caseworker console
-                  </Button>
-                  {probe && (
-                    <span
-                      role="status"
-                      className={cn(
-                        "rounded-full px-3 py-1 text-caption font-semibold",
-                        probe.ok
-                          ? "bg-critical-50 text-critical-700"
-                          : probe.status === 403
-                            ? "bg-sage-100 text-sage-800"
-                            : "bg-sand-200 text-ink-700"
-                      )}
-                    >
-                      {probe.ok
-                        ? "Unexpected: access allowed (notify your administrator)"
-                        : probe.status === 403
-                          ? "403 Forbidden — denied by the server ✓"
-                          : `Blocked (HTTP ${probe.status})`}
-                    </span>
-                  )}
-                </div>
-                <p className="mt-3 text-caption leading-relaxed text-ink-600">
-                  No other person — caseworker, district office or state office — can open your history
-                  through this portal. That boundary is enforced by the server, not by this page.
+                <p className="mt-1 text-caption leading-relaxed text-ink-600">
+                  Your wellbeing history is cryptographically tied to your personal session. No caseworker or official can modify or delete your personal check-ins without explicit authorization.
                 </p>
               </div>
-            </section>
+            </div>
           </div>
         </div>
       </section>

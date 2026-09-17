@@ -27,6 +27,42 @@ module.exports = {
       transparent: "transparent",
       white: "#FFFFFF",
 
+      /* Shadcn semantic mappings wired directly to Sahara's palette */
+      border: "var(--color-sand-200)",
+      input: "var(--color-sand-300)",
+      ring: "var(--color-marigold-500)",
+      background: "var(--color-sand-50)",
+      foreground: "var(--color-ink-900)",
+      primary: {
+        DEFAULT: "var(--color-marigold-600)",
+        foreground: "#FFFFFF",
+        hover: "var(--color-marigold-700)",
+      },
+      secondary: {
+        DEFAULT: "var(--color-sand-100)",
+        foreground: "var(--color-ink-900)",
+      },
+      destructive: {
+        DEFAULT: "var(--color-critical-600)",
+        foreground: "#FFFFFF",
+      },
+      muted: {
+        DEFAULT: "var(--color-sand-100)",
+        foreground: "var(--color-ink-500)",
+      },
+      accent: {
+        DEFAULT: "var(--color-marigold-50)",
+        foreground: "var(--color-marigold-800)",
+      },
+      popover: {
+        DEFAULT: "#FFFFFF",
+        foreground: "var(--color-ink-900)",
+      },
+      card: {
+        DEFAULT: "#FFFFFF",
+        foreground: "var(--color-ink-900)",
+      },
+
       sand: {
         50:  "#FAF6EF", // page canvas
         100: "#F4EDE1", // raised surfaces, alt section fields
@@ -100,6 +136,15 @@ module.exports = {
        3xl→h2 · 4xl→h1 · 5xl/6xl→display (see style-guide.md §2)
        ------------------------------------------------------------------ */
     fontSize: {
+      xs:        ["0.75rem",  { lineHeight: "1rem" }],
+      sm:        ["0.875rem", { lineHeight: "1.25rem" }],
+      base:      ["1rem",     { lineHeight: "1.5rem" }],
+      lg:        ["1.125rem", { lineHeight: "1.75rem" }],
+      xl:        ["1.25rem",  { lineHeight: "1.75rem" }],
+      "2xl":     ["1.5rem",   { lineHeight: "2rem" }],
+      "3xl":     ["1.875rem", { lineHeight: "2.25rem" }],
+      "4xl":     ["2.25rem",  { lineHeight: "2.5rem" }],
+      "5xl":     ["3rem",     { lineHeight: "1" }],
       eyebrow:   ["0.75rem",  { lineHeight: "1.4",   letterSpacing: "0.12em", fontWeight: "600" }],
       caption:   ["0.8125rem",{ lineHeight: "1.45",  fontWeight: "500" }],
       small:     ["0.875rem", { lineHeight: "1.55",  fontWeight: "400" }],
@@ -269,5 +314,5 @@ module.exports = {
     },
   },
 
-  plugins: [],
+  plugins: [require("tailwindcss-animate")],
 };

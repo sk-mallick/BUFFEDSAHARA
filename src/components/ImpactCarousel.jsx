@@ -61,9 +61,9 @@ export default function ImpactCarousel({ slides, tag, className }) {
       onBlur={() => setHoverPaused(false)}
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
-      className={cn("group relative overflow-hidden rounded-xl border border-sand-200 shadow-3 outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-marigold-600", className)}
+      className={cn("group relative flex h-full flex-col overflow-hidden rounded-2xl border border-sand-200 shadow-2 outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-marigold-600", className)}
     >
-      <div className="relative h-[440px] sm:h-[460px]" aria-live="off">
+      <div className="relative h-[380px] flex-1 sm:h-[420px] lg:h-full lg:min-h-[380px]" aria-live="off">
         <AnimatePresence initial={false}>
           <motion.figure
             key={index}

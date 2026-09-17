@@ -92,12 +92,12 @@
     @apply badge border-amber-200 bg-amber-50 text-amber-600;
   }
 
-  /* Warm card hover: gentle rise + deeper soft shadow (150–250ms tokens). */
+  /* Warm card hover: stable subtle shadow + border enhancement without movement. */
   .card-lift {
-    @apply transition-all duration-base ease-gentle hover:-translate-y-1 hover:shadow-3;
+    @apply transition-all duration-base ease-gentle hover:border-sand-300 hover:shadow-2;
   }
   .card-lift-sm {
-    @apply transition-all duration-base ease-gentle hover:-translate-y-0.5 hover:shadow-2;
+    @apply transition-all duration-base ease-gentle hover:border-sand-300 hover:shadow-1;
   }
 
   /* Animated underline for text links — draws left to right on hover. */

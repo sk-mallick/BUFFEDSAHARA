@@ -236,52 +236,49 @@ export default function Hero() {
           </motion.div>
 
           <motion.h1
-            
-            className="mt-5 max-w-xl font-display text-[2.6rem] font-medium leading-[1.05] tracking-[-0.02em] text-white [text-shadow:0_2px_24px_rgba(10,14,20,0.35)] md:text-[4.2rem] md:leading-[1.02]"
+            className="mt-4 sm:mt-5 max-w-xl font-display text-[2.25rem] sm:text-[3.2rem] md:text-[4.2rem] font-medium leading-[1.08] tracking-[-0.02em] text-white [text-shadow:0_2px_24px_rgba(10,14,20,0.35)] md:leading-[1.02]"
           >
             {t("hero.title")}
           </motion.h1>
 
           <motion.p
-            
-            className="mt-5 max-w-xl font-medium text-white text-body-lg [text-shadow:0_1px_16px_rgba(6,9,14,0.75),0_1px_3px_rgba(6,9,14,0.6)]"
+            className="mt-4 sm:mt-5 max-w-xl font-medium text-white text-base sm:text-lg md:text-body-lg [text-shadow:0_1px_16px_rgba(6,9,14,0.75),0_1px_3px_rgba(6,9,14,0.6)]"
           >
             {t("hero.sub")}
           </motion.p>
 
-          <motion.div  className="mt-8 flex flex-wrap items-center gap-4">
-            <Button to="/talk" size="lg" className="rounded-full px-7">
+          <motion.div className="mt-6 sm:mt-8 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 max-w-sm sm:max-w-none">
+            <Button to="/talk" size="lg" className="rounded-full px-7 shadow-1 hover:shadow-2 transition-shadow w-full sm:w-auto">
               {t("hero.cta1")}
               <ArrowRight size={16} aria-hidden="true" />
             </Button>
-            <Button to="/how-it-works" size="lg" variant="secondary" className="rounded-full px-6">
+            <Button to="/how-it-works" size="lg" variant="secondary" className="rounded-full px-6 shadow-1 hover:shadow-2 transition-shadow w-full sm:w-auto">
               <Play size={16} aria-hidden="true" className="text-marigold-600" />
               {t("hero.watch")}
             </Button>
           </motion.div>
 
-          <motion.p
-            
-            className="mt-7 inline-flex flex-wrap items-center gap-x-6 gap-y-2 text-small font-medium text-white/90 [text-shadow:0_1px_12px_rgba(10,14,20,0.55),0_1px_3px_rgba(10,14,20,0.4)]"
+          <motion.div
+            className="mt-6 sm:mt-7 flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-[13px] font-medium text-white/95"
           >
-            <span className="inline-flex items-center gap-1.5">
-              <Lock size={14} aria-hidden="true" className="text-white/70" />
-              {t("hero.trust1")}
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-black/25 backdrop-blur-md px-3 py-1 border border-white/15 shadow-xs">
+              <Lock size={13} aria-hidden="true" className="text-sand-300" />
+              <span>{t("hero.trust1")}</span>
             </span>
-            <span className="inline-flex items-center gap-1.5">
-              <HandHeart size={14} aria-hidden="true" className="text-white/70" />
-              {t("hero.trust2")}
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-black/25 backdrop-blur-md px-3 py-1 border border-white/15 shadow-xs">
+              <HandHeart size={13} aria-hidden="true" className="text-sand-300" />
+              <span>{t("hero.trust2")}</span>
             </span>
-            <span className="inline-flex items-center gap-1.5">
-              <UserRound size={14} aria-hidden="true" className="text-white/70" />
-              {t("hero.trust3")}
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-black/25 backdrop-blur-md px-3 py-1 border border-white/15 shadow-xs">
+              <UserRound size={13} aria-hidden="true" className="text-sand-300" />
+              <span>{t("hero.trust3")}</span>
             </span>
-          </motion.p>
+          </motion.div>
         </div>
       </motion.div>
 
       {/* Scroll indicator — minimal line wipe, no bouncing */}
-      <div className="absolute bottom-6 left-1/2 z-40 -translate-x-1/2" style={{ zIndex: 40 }}>
+      <div className="hidden sm:block absolute bottom-6 left-1/2 z-40 -translate-x-1/2" style={{ zIndex: 40 }}>
         <a
           href="#after-hero"
           onClick={(e) => {
@@ -307,14 +304,15 @@ export default function Hero() {
         </a>
       </div>
 
-      {/* Ministry attribution — quiet, bottom-right */}
-      <p className="absolute bottom-20 right-6 z-40 text-right text-[10.5px] leading-[1.6] text-white/70 [text-shadow:0_1px_8px_rgba(10,14,20,0.4)]">
-        <span className="font-semibold text-white/85">{t("hero.initiative")}</span>
+      {/* Ministry attribution — quiet, offset from floating chat launcher */}
+      <p className="hidden md:block absolute bottom-8 right-24 z-40 text-right text-[10.5px] leading-[1.6] text-white/75 [text-shadow:0_1px_8px_rgba(10,14,20,0.4)] select-none">
+        <span className="font-semibold text-white/90">{t("hero.initiative")}</span>
         <br />
         {t("hero.ministry")}
         <br />
         {t("hero.government")}
       </p>
+
 
       {/* Anchor for the scroll cue — the content after the hero */}
       <span id="after-hero" className="absolute -bottom-px" />

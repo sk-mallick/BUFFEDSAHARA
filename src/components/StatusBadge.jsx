@@ -40,14 +40,14 @@ export default function StatusBadge({ level = "stable", size = "md", className, 
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border font-medium",
+        "inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border font-medium",
         size === "md" ? "px-2.5 py-1 text-caption" : "px-2 py-0.5 text-[11px] leading-5",
         config.cls,
         className
       )}
     >
-      <Icon size={size === "md" ? 13 : 11} aria-hidden="true" />
-      {label ?? config.label}
+      <Icon size={size === "md" ? 13 : 11} aria-hidden="true" className="shrink-0" />
+      <span>{label ?? config.label}</span>
     </span>
   );
 }

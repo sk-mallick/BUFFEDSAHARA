@@ -33,6 +33,15 @@ import Button from "../ui/Button";
 import cn from "../lib/cn";
 import { adminApi, ApiError } from "../lib/api";
 import { useAuth } from "../lib/auth";
+import { Card, CardContent } from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
 
 // ---------------------------------------------------------------------------
 // Risk-band presentation. Colours are the Sahara system's own (sage → amber →
@@ -108,12 +117,14 @@ const badgeLevel = (key) => (key === "needs_attention" ? "attention" : key);
 // ---------------------------------------------------------------------------
 function Stat({ label, value, tone = "text-ink-900", loading }) {
   return (
-    <div className="rounded-xl border border-sand-200 bg-white px-4 py-3">
-      <p className="text-caption font-medium uppercase tracking-wider text-ink-500">{label}</p>
-      <p className={cn("mt-1 font-display text-2xl font-semibold leading-tight", tone)}>
-        {loading ? "—" : value}
-      </p>
-    </div>
+    <Card className="border-sand-200 bg-white">
+      <CardContent className="p-3.5 sm:p-4">
+        <p className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-ink-500">{label}</p>
+        <p className={cn("mt-1 font-display text-2xl sm:text-3xl font-semibold leading-tight", tone)}>
+          {loading ? "—" : value}
+        </p>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -545,21 +556,37 @@ export default function AdminDashboardPage() {
                     GET /api/admin/trends.
                   </p>
                 </div>
-                <div role="group" aria-label="Time range" className="flex rounded-lg border border-sand-200 bg-sand-50 p-0.5">
-                  {RANGES.map((r) => (
-                    <button
-                      key={r.days}
-                      type="button"
-                      aria-pressed={days === r.days}
-                      onClick={() => changeRange(r.days)}
-                      className={cn(
-                        "rounded-md px-3 py-1.5 text-caption font-medium transition-colors duration-fast focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-marigold-600",
-                        days === r.days ? "bg-white text-ink-900 shadow-1" : "text-ink-500 hover:text-ink-900"
-                      )}
-                    >
-                      {r.label}
-                    </button>
-                  ))}
+                <div className="flex items-center gap-2">
+                  <div role="group" aria-label="Time range" className="hidden sm:flex rounded-lg border border-sand-200 bg-sand-50 p-0.5">
+                    {RANGES.map((r) => (
+                      <button
+                        key={r.days}
+                        type="button"
+                        aria-pressed={days === r.days}
+                        onClick={() => changeRange(r.days)}
+                        className={cn(
+                          "rounded-md px-3 py-1.5 text-caption font-medium transition-colors duration-fast focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-marigold-600",
+                          days === r.days ? "bg-white text-ink-900 shadow-1" : "text-ink-500 hover:text-ink-900"
+                        )}
+                      >
+                        {r.label}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="sm:hidden w-28">
+                    <Select value={String(days)} onValueChange={(val) => changeRange(Number(val))}>
+                      <SelectTrigger className="h-8 text-xs bg-sand-50">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {RANGES.map((r) => (
+                          <SelectItem key={r.days} value={String(r.days)} className="text-xs">
+                            {r.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
               </div>
 
@@ -856,7 +883,7 @@ export default function AdminDashboardPage() {
                           Case record <ExternalLink size={13} aria-hidden="true" />
                         </Button>
                       ) : (
-                        <span className="shrink-0 text-caption italic text-ink-400">
+                        <span className="text-caption italic text-ink-400">
                           file restricted to assigned caseworker
                         </span>
                       )}

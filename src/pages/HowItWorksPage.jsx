@@ -4,6 +4,7 @@ import Section from "../ui/Section";
 import Reveal from "../ui/Reveal";
 import Button from "../ui/Button";
 import Accordion from "../ui/Accordion";
+import HowItWorks from "../sections/HowItWorks";
 
 const lanes = [
   {
@@ -61,7 +62,9 @@ export default function HowItWorksPage() {
         lead="Sahara is designed to be felt, not noticed. Here is exactly what happens — and who it happens with — at every step."
       />
 
-      <Section tone="white">
+      <HowItWorks />
+
+      <Section tone="white" eyebrow="Tailored by role" title="Built for everyone involved.">
         <Reveal>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {lanes.map((lane) => (

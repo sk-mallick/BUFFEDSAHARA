@@ -190,6 +190,8 @@ export default function DashboardMock() {
   const [followUpStatus, setFollowUpStatus] = useState("follow_up_scheduled");
   const [savedFollowUp, setSavedFollowUp] = useState(false);
   const [timelineEnd, setTimelineEnd] = useState("Day 37");
+  const [activeTab, setActiveTab] = useState("queue"); // "queue" | "case" for responsive viewports
+  const [selectedCaseId, setSelectedCaseId] = useState("DEMO-042");
 
   // ---- Derived counters (the dashboard header reads real aggregates from
   // ---- GET /api/dashboard/alerts-summary; here they derive from mock state).
@@ -328,18 +330,48 @@ export default function DashboardMock() {
       </div>
 
       {/* Main column */}
-      <div className="min-w-0 flex-1 space-y-3 p-3 sm:p-4">
+      <div className={cn("min-w-0 flex-1 space-y-3 p-3 sm:p-4", activeTab === "case" ? "hidden lg:block" : "block")}>
         {/* Top bar */}
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <p className="text-[13px] font-semibold">Caseworker console</p>
-            <p className="text-[10px] text-ink-500">SIH demonstration data — fictional cases, no real beneficiaries</p>
+        <div className="flex flex-wrap items-center justify-between gap-2.5">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <p className="text-[13px] font-semibold text-ink-900">Caseworker console</p>
+              <span className="rounded-full border border-sage-200 bg-sage-50 px-2 py-0.5 text-[8.5px] font-medium text-sage-700">Live Triage</span>
+            </div>
+            <p className="truncate text-[10px] text-ink-500">SIH demonstration data — fictional cases, no real beneficiaries</p>
           </div>
+
           <div className="flex items-center gap-2">
-            <span className="hidden items-center gap-1.5 rounded-full border border-sand-200 bg-sand-50 px-2 py-1 text-[10px] text-ink-500 lg:inline-flex">
-              <Search size={10} /> Search…
+            {/* View switcher for tablet/mobile (< lg) */}
+            <div className="flex items-center rounded-lg border border-sand-200 bg-sand-100 p-0.5 lg:hidden">
+              <button
+                type="button"
+                onClick={() => setActiveTab("queue")}
+                className={cn(
+                  "flex items-center gap-1 rounded-md px-2.5 py-1 text-[10px] font-semibold transition-colors",
+                  activeTab === "queue" ? "bg-white text-ink-900 shadow-xs" : "text-ink-600 hover:text-ink-900"
+                )}
+              >
+                <ShieldAlert size={11} aria-hidden="true" />
+                <span>Queue &amp; Alerts</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("case")}
+                className={cn(
+                  "flex items-center gap-1 rounded-md px-2.5 py-1 text-[10px] font-semibold transition-colors",
+                  activeTab === "case" ? "bg-white text-ink-900 shadow-xs" : "text-ink-600 hover:text-ink-900"
+                )}
+              >
+                <UserCheck size={11} aria-hidden="true" />
+                <span>DEMO-042</span>
+              </button>
+            </div>
+
+            <span className="hidden items-center gap-1.5 rounded-full border border-sand-200 bg-sand-50 px-2.5 py-1 text-[10px] text-ink-500 lg:inline-flex">
+              <Search size={10} aria-hidden="true" /> Search…
             </span>
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-marigold-100 text-[10px] font-semibold text-marigold-700">SK</span>
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-marigold-100 text-[10px] font-semibold text-marigold-700" title="Caseworker SK">SK</span>
           </div>
         </div>
 
@@ -361,40 +393,46 @@ export default function DashboardMock() {
         </div>
 
         {/* Queue */}
-        <div className="overflow-hidden rounded-xl border border-sand-200">
+        <div className="overflow-hidden rounded-xl border border-sand-200 bg-white">
           <div className="flex items-center justify-between border-b border-sand-200 bg-sand-50 px-3 py-2">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-500">Distress-risk queue</span>
             <span className="text-[9px] text-ink-400">prioritised by the risk engine</span>
           </div>
-          {queue.map((row) => (
-            <div
-              key={row.id}
-              className={cn(
-                "grid grid-cols-2 items-center gap-2 border-b border-sand-200 px-3 py-2 last:border-b-0 sm:grid-cols-[1.2fr_0.8fr_0.7fr_0.8fr_0.7fr_0.8fr_0.9fr]",
-                row.id === "DEMO-042" && "bg-marigold-50/60"
-              )}
-            >
-              <div className="min-w-0">
-                <span className="flex items-center gap-1.5 font-mono text-[11px] font-medium text-ink-900">
-                  {row.id}
-                  {row.crisis && (
-                    <span className="rounded-full bg-critical-50 px-1.5 py-px text-[8px] font-semibold uppercase tracking-wide text-critical-700">Safety</span>
-                  )}
-                </span>
-                <span className="mt-0.5 block truncate text-[9px] leading-3 text-ink-500">{row.reason}</span>
+          <div className="divide-y divide-sand-200 overflow-x-auto">
+            {queue.map((row) => (
+              <div
+                key={row.id}
+                onClick={() => {
+                  setSelectedCaseId(row.id);
+                  if (row.id === "DEMO-042") setActiveTab("case");
+                }}
+                className={cn(
+                  "grid min-w-[340px] cursor-pointer grid-cols-2 items-center gap-2 px-3 py-2 transition-colors duration-fast sm:min-w-0 sm:grid-cols-[1.4fr_0.9fr_0.6fr_0.8fr_0.6fr_0.8fr_0.8fr] hover:bg-sand-50/80",
+                  row.id === selectedCaseId && "bg-marigold-50/60"
+                )}
+              >
+                <div className="min-w-0">
+                  <span className="flex items-center gap-1.5 whitespace-nowrap font-mono text-[11px] font-medium text-ink-900">
+                    <span className="shrink-0">{row.id}</span>
+                    {row.crisis && (
+                      <span className="shrink-0 rounded-full bg-critical-50 px-1.5 py-px text-[8px] font-semibold uppercase tracking-wide text-critical-700">Safety</span>
+                    )}
+                  </span>
+                  <span className="mt-0.5 block truncate text-[9px] leading-3 text-ink-500">{row.reason}</span>
+                </div>
+                <StatusBadge level={row.level} size="sm" />
+                <span className="hidden font-mono text-[11px] text-ink-900 sm:inline">{row.score}<span className="text-[9px] text-ink-500">/100</span></span>
+                <span className="hidden sm:inline"><TrendCell trend={row.trend} /></span>
+                <span className="hidden font-mono text-[11px] text-ink-700 md:inline">{row.esc}%</span>
+                <span className="hidden lg:inline"><StatusBadge level={row.priorityLevel} size="sm" label={row.priority} /></span>
+                <span className="hidden text-[10px] text-ink-500 lg:inline">{row.followUp}</span>
               </div>
-              <StatusBadge level={row.level} size="sm" />
-              <span className="hidden font-mono text-[11px] text-ink-900 sm:inline">{row.score}<span className="text-[9px] text-ink-500">/100</span></span>
-              <span className="hidden sm:inline"><TrendCell trend={row.trend} /></span>
-              <span className="hidden font-mono text-[11px] text-ink-700 md:inline">{row.esc}%</span>
-              <span className="hidden lg:inline"><StatusBadge level={row.priorityLevel} size="sm" label={row.priority} /></span>
-              <span className="hidden text-[10px] text-ink-500 lg:inline">{row.followUp}</span>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* ALERT CENTER — GET /api/alerts */}
-        <div className="overflow-hidden rounded-xl border border-sand-200">
+        <div className="overflow-hidden rounded-xl border border-sand-200 bg-white">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-sand-200 bg-sand-50 px-3 py-2">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-600">
               Alerts &amp; escalations
@@ -452,10 +490,10 @@ export default function DashboardMock() {
                     <StatusBadge level={alert.level} size="sm" />
                     <span className="text-[11px] font-semibold text-ink-900">{alert.title}</span>
                     {!alert.acked && !alert.resolved && (
-                      <span className="rounded-full bg-amber-100 px-1.5 py-px text-[8px] font-bold uppercase tracking-wide text-amber-800">Unread</span>
+                      <span className="shrink-0 whitespace-nowrap rounded-full bg-amber-100 px-1.5 py-px text-[8px] font-bold uppercase tracking-wide text-amber-800">Unread</span>
                     )}
                     {alert.safety && (
-                      <span className="rounded-full border border-critical-200 bg-critical-50 px-1.5 py-px text-[8px] font-bold uppercase tracking-wide text-critical-700">
+                      <span className="shrink-0 whitespace-nowrap rounded-full border border-critical-200 bg-critical-50 px-1.5 py-px text-[8px] font-bold uppercase tracking-wide text-critical-700">
                         Urgent — human review required
                       </span>
                     )}
@@ -471,6 +509,10 @@ export default function DashboardMock() {
                   <div className="flex items-center gap-1.5">
                     <button
                       type="button"
+                      onClick={() => {
+                        setSelectedCaseId(alert.caseId);
+                        if (alert.caseId === "DEMO-042") setActiveTab("case");
+                      }}
                       className="rounded-md border border-sand-300 bg-white px-2 py-1 text-[9px] font-semibold text-ink-700 transition-colors duration-fast hover:bg-sand-50"
                     >
                       Review case
@@ -504,69 +546,86 @@ export default function DashboardMock() {
       </div>
 
       {/* Case detail — DEMO-042 */}
-      <div className="hidden w-80 shrink-0 space-y-3 overflow-y-auto border-l border-sand-200 p-3 lg:block">
+      <div
+        className={cn(
+          "w-full shrink-0 space-y-2.5 border-sand-200 p-3 sm:p-4 lg:w-80 lg:border-l",
+          activeTab === "case" ? "block" : "hidden lg:block"
+        )}
+      >
         <div className="flex items-center justify-between gap-2">
-          <p className="font-mono text-[11px] font-medium">DEMO-042</p>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setActiveTab("queue")}
+              className="flex items-center gap-1 rounded border border-sand-200 bg-white px-2 py-0.5 text-[9.5px] font-semibold text-ink-700 hover:bg-sand-50 lg:hidden"
+            >
+              ← Queue
+            </button>
+            <div>
+              <span className="font-mono text-xs font-semibold text-ink-900">{selectedCaseId}</span>
+              <span className="ml-1.5 text-[9.5px] text-ink-500">· P. Kumar</span>
+            </div>
+          </div>
           <StatusBadge level="attention" size="sm" />
         </div>
-        <p className="text-[9px] text-ink-500">SIH demonstration data — fictional case · P. Kumar</p>
+        <p className="text-[9px] text-ink-500">SIH demonstration data — fictional case · Active monitoring</p>
 
-        {/* Current risk */}
-        <div className="rounded-xl border border-sand-200 bg-sand-50 p-3">
-          <p className="text-[9px] font-semibold uppercase tracking-wider text-ink-500">Current risk</p>
-          <p className="mt-1 font-display text-2xl font-semibold leading-none text-ink-900">
-            63 <span className="text-sm font-normal text-ink-500">/ 100</span>
-          </p>
-          <div className="mt-2 flex flex-wrap gap-1">
-            {["7d ↑", "14d ↑", "30d —"].map((chip) => (
-              <span key={chip} className="rounded-full border border-sand-200 bg-white px-1.5 py-0.5 text-[9px] font-medium text-ink-700">{chip}</span>
-            ))}
-            {statusChip(alerts.find((a) => a.caseId === "DEMO-042" && !a.resolved)?.reviewStatus ?? "awaiting_review")}
+        {/* Telemetry Grid: Current Risk & Forecast side by side */}
+        <div className="grid grid-cols-2 gap-2">
+          {/* Current Risk */}
+          <div className="rounded-xl border border-sand-200 bg-sand-50/80 p-2.5">
+            <div className="flex items-center justify-between">
+              <p className="text-[8.5px] font-semibold uppercase tracking-wider text-ink-500">Current risk</p>
+              <span className="font-mono text-[8px] font-medium text-amber-700">7d ↑</span>
+            </div>
+            <p className="mt-1 font-display text-xl font-semibold leading-none text-ink-900">
+              63 <span className="text-[10px] font-normal text-ink-500">/ 100</span>
+            </p>
+            <div className="mt-2 flex items-center gap-1">
+              {statusChip(alerts.find((a) => a.caseId === selectedCaseId && !a.resolved)?.reviewStatus ?? "awaiting_review")}
+            </div>
+          </div>
+
+          {/* Escalation Forecast */}
+          <div className="rounded-xl border border-amber-200 bg-amber-50/80 p-2.5">
+            <p className="text-[8.5px] font-semibold uppercase tracking-wider text-amber-700">7d Forecast</p>
+            <p className="mt-1 text-xs font-semibold leading-tight text-amber-900">58% escalation</p>
+            <p className="mt-1 text-[8px] leading-3 text-amber-700">Predictive distress trajectory</p>
           </div>
         </div>
 
-        {/* Prediction */}
-        <div className="rounded-xl border border-amber-200 bg-amber-50 p-3">
-          <p className="text-[9px] font-semibold uppercase tracking-wider text-amber-700">Prediction</p>
-          <p className="mt-1 text-sm font-semibold text-amber-800">58% estimated escalation <span className="font-normal">over the next 7 days</span></p>
-          <p className="mt-1 text-[8.5px] leading-3.5 text-amber-700">Prototype predictive model — requires validation on real anonymised data before operational deployment.</p>
-        </div>
-
         {/* Why prioritised */}
-        <div>
-          <p className="text-[9px] font-semibold uppercase tracking-wider text-ink-500">Why has this case been prioritised?</p>
-          <ul className="mt-2 space-y-1.5">
+        <div className="rounded-xl border border-sand-200 bg-white p-2.5">
+          <p className="text-[9px] font-semibold uppercase tracking-wider text-ink-600">Why prioritised</p>
+          <ul className="mt-1.5 space-y-1">
             {demoFactors.map((f) => (
               <li key={f.text} className="flex items-start gap-1.5">
                 <span className={cn("mt-1 h-1.5 w-1.5 shrink-0 rounded-full", f.impact === "high" ? "bg-marigold-500" : f.impact === "medium" ? "bg-amber-400" : "bg-ink-300")} />
-                <span className="text-[10px] leading-3.5 text-ink-700">{f.text}</span>
+                <span className="text-[9.5px] leading-3.5 text-ink-700">{f.text}</span>
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Timeline — typed AI / human / system events (never colour alone) */}
-        <div>
-          <p className="text-[9px] font-semibold uppercase tracking-wider text-ink-500">Case timeline</p>
-          <ol className="mt-2 space-y-2">
+        {/* Case Timeline */}
+        <div className="rounded-xl border border-sand-200 bg-white p-2.5">
+          <div className="flex items-center justify-between border-b border-sand-100 pb-1.5">
+            <p className="text-[9px] font-semibold uppercase tracking-wider text-ink-600">Case timeline</p>
+            <span className="font-mono text-[8.5px] text-ink-400">{timeline.length} events</span>
+          </div>
+          <ol className="mt-2 max-h-40 space-y-1.5 overflow-y-auto pr-1">
             {timeline.map((ev, i) => {
               const meta = kindMeta[ev.kind] ?? kindMeta.system;
               return (
-                <li key={`${ev.day}-${i}`} className="flex items-start gap-1.5">
-                  <span className={cn("mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border", meta.cls)} aria-hidden="true">
-                    <meta.Icon size={9} />
+                <li key={`${ev.day}-${i}`} className="flex items-start gap-1.5 text-[9.5px]">
+                  <span className={cn("mt-0.5 flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full border", meta.cls)} aria-hidden="true">
+                    <meta.Icon size={8} />
                   </span>
-                  <span className="min-w-0 text-[10px] leading-4 text-ink-700">
-                    {/* Kind is TEXT + icon + colour — never colour alone. */}
-                    <span className={cn("rounded border px-1 py-px text-[7px] font-bold uppercase tracking-wider", meta.cls)}>
-                      {meta.label}
-                    </span>
-                    <span className="block">
-                      <span className="font-mono font-medium text-ink-500">{ev.day}</span>
-                      <span className="mx-1 text-ink-300">—</span>
-                      <span className="font-medium text-ink-800">{ev.text}</span>
-                    </span>
-                    {ev.text2 && <span className="block text-[9px] leading-3.5 text-ink-500">{ev.text2}</span>}
+                  <span className="min-w-0 leading-tight text-ink-700">
+                    <span className="font-mono text-[8.5px] font-medium text-ink-500">{ev.day}</span>
+                    <span className="mx-1 text-ink-300">·</span>
+                    <span className="font-medium text-ink-900">{ev.text}</span>
+                    {ev.text2 && <span className="block text-[8.5px] text-ink-500">{ev.text2}</span>}
                   </span>
                 </li>
               );
@@ -574,26 +633,31 @@ export default function DashboardMock() {
           </ol>
         </div>
 
-        {/* HUMAN SUPPORT ACTION */}
-        <div className="rounded-xl border border-sand-200 bg-white p-3">
-          <p className="text-[9px] font-semibold uppercase tracking-wider text-ink-600">Human support action</p>
-          <p className="mt-0.5 text-[8.5px] leading-3.5 text-ink-500">
-            Decisions are recorded by a caseworker. Prototype actions — no real call or session is claimed.
+        {/* Human Support Actions */}
+        <div className="rounded-xl border border-sand-200 bg-white p-2.5">
+          <div className="flex items-center justify-between">
+            <p className="text-[9px] font-semibold uppercase tracking-wider text-ink-600">Human support actions</p>
+            <span className="text-[8px] font-medium text-sage-700">Caseworker Decision</span>
+          </div>
+          <p className="mt-0.5 text-[8.5px] leading-3 text-ink-500">
+            Decisions recorded by caseworker · Risk score unchanged.
           </p>
-          <div className="mt-2 grid grid-cols-1 gap-1">
-            {actionOptions.map((opt) => (
+          <div className="mt-2 grid grid-cols-2 gap-1">
+            {actionOptions.map((opt, idx) => (
               <button
                 key={opt.value}
                 type="button"
                 onClick={() => recordAction(opt.value)}
                 className={cn(
-                  "flex items-center gap-1.5 rounded-md border px-2 py-1.5 text-left text-[9.5px] font-medium transition-colors duration-fast",
+                  "flex items-center gap-1 rounded-md border px-1.5 py-1 text-left text-[9px] font-medium transition-colors duration-fast",
+                  idx === actionOptions.length - 1 ? "col-span-2" : "",
                   chosenAction === opt.value
-                    ? "border-marigold-500 bg-marigold-50 text-marigold-800"
+                    ? "border-marigold-500 bg-marigold-50 text-marigold-800 font-semibold"
                     : "border-sand-200 bg-white text-ink-700 hover:border-sand-300 hover:bg-sand-50"
                 )}
               >
-                <opt.icon size={11} aria-hidden="true" /> {opt.label}
+                <opt.icon size={10} className="shrink-0 text-marigold-600" aria-hidden="true" />
+                <span className="truncate">{opt.label}</span>
               </button>
             ))}
           </div>
@@ -625,7 +689,7 @@ export default function DashboardMock() {
               </label>
               <textarea
                 rows={2}
-                defaultValue="Caseworker note: …"
+                defaultValue="Caseworker note: Follow-up session coordinated."
                 className="w-full rounded border border-sand-300 bg-white px-1.5 py-1 text-[9px] text-ink-700 outline-none"
               />
               <button
@@ -648,9 +712,9 @@ export default function DashboardMock() {
         </div>
 
         {/* Explainability */}
-        <details className="rounded-xl border border-sand-200 bg-white p-3">
-          <summary className="cursor-pointer text-[10px] font-semibold text-ink-700">How this score was calculated</summary>
-          <ol className="mt-2 space-y-1 text-[10px] leading-3.5 text-ink-700">
+        <details className="rounded-xl border border-sand-200 bg-white p-2.5">
+          <summary className="cursor-pointer text-[9.5px] font-semibold text-ink-700">How this score was calculated</summary>
+          <ol className="mt-2 space-y-1 text-[9.5px] leading-3.5 text-ink-700">
             {["Signals considered", "Recent wellbeing", "Longitudinal trend", "Conversation sentiment", "Crisis indicators", "Risk estimate"].map((step, i) => (
               <li key={step} className="flex items-center gap-1.5">
                 <span className="font-mono text-[9px] text-marigold-600">{i + 1}</span>
@@ -661,18 +725,18 @@ export default function DashboardMock() {
           </ol>
         </details>
 
-        {/* Crisis Chat Flags — GET /api/dashboard/chat-flags (no raw chats) */}
-        <div>
-          <p className="text-[9px] font-semibold uppercase tracking-wider text-ink-500">Crisis chat flags</p>
-          <ul className="mt-2 space-y-2">
+        {/* Crisis Chat Flags */}
+        <div className="rounded-xl border border-sand-200 bg-white p-2.5">
+          <p className="text-[9px] font-semibold uppercase tracking-wider text-ink-600">Crisis chat flags</p>
+          <ul className="mt-1.5 space-y-1.5">
             {chatFlags.map((f, i) => (
               <li key={`${f.id}-${i}`} className="rounded-lg border border-amber-200 bg-amber-50 p-2">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-mono text-[10px] font-medium text-ink-900">{f.id}</span>
+                  <span className="font-mono text-[9.5px] font-medium text-ink-900">{f.id}</span>
                   <StatusBadge level="urgent" size="sm" />
                 </div>
-                <p className="mt-1 text-[10px] text-ink-700">{f.name} · {f.time}</p>
-                <p className="mt-1 text-[9px] leading-3 text-ink-500">{f.keywords.map((k) => `“${k}”`).join(", ")}</p>
+                <p className="mt-0.5 text-[9px] text-ink-700">{f.name} · {f.time}</p>
+                <p className="mt-0.5 text-[8.5px] leading-3 text-ink-500">{f.keywords.map((k) => `“${k}”`).join(", ")}</p>
               </li>
             ))}
           </ul>

@@ -1,7 +1,8 @@
-import { FileCheck2, Lock, Scale, UserCheck } from "lucide-react";
+import { FileCheck2, Lock, Scale, ShieldCheck, UserCheck } from "lucide-react";
 import Section from "../ui/Section";
 import Reveal from "../ui/Reveal";
 import { useLang } from "../lib/i18n";
+import cn from "../lib/cn";
 
 const items = [
   { icon: Scale, key: "trust.items.0" },
@@ -22,37 +23,42 @@ export default function TrustEthics() {
   return (
     <Section tone="white" eyebrow={t("trust.eyebrow")} title={t("trust.title")} lead={t("trust.lead")}>
       <Reveal>
-        <div className="grid overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-1 lg:grid-cols-2">
+        <div className="grid overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-1 sm:grid-cols-2">
           {rows.map((row, i) => {
             const Icon = items[i].icon;
             return (
-              <Reveal key={row.title} delay={0.05} className="h-full">
-                <div
-                  className={
-                    "flex h-full gap-5 p-7 " +
-                    (i >= 1 ? "border-t border-sand-200 " : "") +
-                    (i >= 2 ? "lg:border-t lg:border-sand-200 " : "lg:border-t-0 ") +
-                    (i % 2 === 1 ? "lg:border-l lg:border-sand-200 " : "")
-                  }
-                >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-sage-200 bg-sage-50">
-                    <Icon size={19} strokeWidth={1.5} className="text-sage-700" aria-hidden="true" />
-                  </span>
-                  <div>
-                    <h3 className="font-display text-h4 text-ink-900">{row.title}</h3>
-                    <p className="mt-1.5 text-small leading-relaxed text-ink-700">{row.line}</p>
-                  </div>
+              <div
+                key={row.title}
+                className={cn(
+                  "flex h-full gap-5 p-6 transition-colors duration-fast ease-soft hover:bg-sand-50/40 sm:p-7",
+                  i > 0 && "border-t border-sand-200",
+                  i === 1 && "sm:border-t-0",
+                  i % 2 === 1 && "sm:border-l sm:border-sand-200"
+                )}
+              >
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-sage-200 bg-sage-50 shadow-xs">
+                  <Icon size={19} strokeWidth={1.5} className="text-sage-700" aria-hidden="true" />
+                </span>
+                <div>
+                  <h3 className="font-display text-h4 text-ink-900">{row.title}</h3>
+                  <p className="mt-1.5 text-small leading-relaxed text-ink-700">{row.line}</p>
                 </div>
-              </Reveal>
+              </div>
             );
           })}
         </div>
       </Reveal>
 
       <Reveal delay={0.12}>
-        <p className="mt-6 rounded-xl border border-sand-200 bg-sand-100 px-5 py-4 text-caption leading-relaxed text-ink-500">
-          {t("trust.disclaimer")}
-        </p>
+        <div className="mt-6 flex items-start gap-3.5 rounded-xl border border-sand-200 bg-sand-100/90 p-4 sm:px-5 sm:py-4">
+          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sage-800" aria-hidden="true">
+            <ShieldCheck size={13} />
+          </span>
+          <div className="text-caption leading-relaxed">
+            <span className="font-semibold text-ink-800">Statutory Compliance & DPDP Framework · </span>
+            <span className="text-ink-600">{t("trust.disclaimer")}</span>
+          </div>
+        </div>
       </Reveal>
     </Section>
   );

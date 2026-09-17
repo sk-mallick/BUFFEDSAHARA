@@ -1,73 +1,97 @@
+import { forwardRef } from "react";
 import { Link } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 import cn from "../lib/cn";
 
 const base =
-  "relative inline-flex items-center justify-center gap-2 rounded-md font-medium leading-none select-none transition-[color,background-color,border-color,box-shadow,transform,opacity] duration-fast ease-soft min-h-[44px] px-6 py-3 text-[0.9375rem]";
+  "relative inline-flex items-center justify-center gap-2 rounded-md font-medium leading-none select-none transition-all duration-fast ease-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-marigold-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
 
 const variants = {
+  default:
+    "bg-marigold-600 text-white hover:bg-marigold-700 hover:shadow-2 active:bg-marigold-800 shadow-1",
   primary:
-    "bg-marigold-600 text-white hover:bg-marigold-700 hover:shadow-3 hover:-translate-y-0.5 active:bg-marigold-800 active:translate-y-0",
+    "bg-marigold-600 text-white hover:bg-marigold-700 hover:shadow-2 active:bg-marigold-800 shadow-1",
   secondary:
-    "bg-white text-ink-900 border border-sand-300 hover:bg-sand-100 hover:border-ink-300 hover:shadow-2 hover:-translate-y-0.5 active:bg-sand-200 active:translate-y-0",
+    "bg-white text-ink-900 border border-sand-300 hover:bg-sand-100 hover:border-sand-400 hover:shadow-1 active:bg-sand-200",
+  outline:
+    "border border-sand-300 bg-white/80 text-ink-900 hover:bg-sand-100 hover:border-sand-400 hover:shadow-1",
   ghost: "bg-transparent text-ink-900 hover:bg-sand-100 active:bg-sand-200",
   quiet: "bg-transparent text-ink-700 hover:text-ink-900 hover:underline underline-offset-4 px-2",
+  destructive:
+    "bg-critical-600 text-white hover:bg-critical-700 active:bg-critical-800 shadow-1",
+  sage:
+    "bg-sage-600 text-white hover:bg-sage-700 active:bg-sage-800 shadow-1",
+  link: "bg-transparent text-marigold-600 underline-offset-4 hover:underline hover:text-marigold-700 p-0 min-h-0",
   "on-dark": "bg-white/10 text-white border border-white/20 hover:bg-white/20",
 };
 
 const sizes = {
-  sm: "min-h-[40px] px-4 py-2 text-small",
-  md: "min-h-[44px] px-6 py-3 text-[0.9375rem]",
-  lg: "min-h-[52px] px-8 py-4 text-base",
+  sm: "min-h-[36px] px-3.5 py-1.5 text-xs",
+  md: "min-h-[44px] px-5 py-2.5 text-sm",
+  lg: "min-h-[50px] px-7 py-3 text-base font-semibold",
+  icon: "h-10 w-10 min-h-[40px] p-0 rounded-md",
 };
 
-export default function Button({
-  variant = "primary",
-  size = "md",
-  className,
-  to,
-  href,
-  disabled,
-  loading,
-  children,
-  ...rest
-}) {
+const Button = forwardRef(function Button(
+  {
+    variant = "primary",
+    size = "md",
+    className,
+    to,
+    href,
+    disabled,
+    loading,
+    children,
+    type = "button",
+    ...rest
+  },
+  ref
+) {
   const busy = Boolean(loading);
   const cls = cn(
     base,
-    variants[variant],
-    sizes[size],
+    variants[variant] || variants.primary,
+    sizes[size] || sizes.md,
     (disabled || busy) && "pointer-events-none opacity-60",
     className
   );
 
   const inner = (
     <>
-      <span className={cn("inline-flex items-center gap-2", busy && "invisible")}>{children}</span>
-      {busy && (
-        <span aria-hidden="true" className="absolute inset-0 flex items-center justify-center">
-          <span className="btn-spinner" />
-        </span>
-      )}
+      {busy && <Loader2 className="h-4 w-4 animate-spin text-current" aria-hidden="true" />}
+      <span className={cn("inline-flex items-center gap-2", busy && "opacity-80")}>
+        {children}
+      </span>
     </>
   );
 
   if (to) {
     return (
-      <Link to={to} className={cls} aria-busy={busy} {...rest}>
+      <Link ref={ref} to={to} className={cls} aria-busy={busy} {...rest}>
         {inner}
       </Link>
     );
   }
   if (href) {
     return (
-      <a href={href} className={cls} aria-busy={busy} {...rest}>
+      <a ref={ref} href={href} className={cls} aria-busy={busy} {...rest}>
         {inner}
       </a>
     );
   }
   return (
-    <button type="button" className={cls} disabled={disabled || busy} {...rest}>
+    <button
+      ref={ref}
+      type={type}
+      className={cls}
+      disabled={disabled || busy}
+      aria-busy={busy}
+      {...rest}
+    >
       {inner}
     </button>
   );
-}
+});
+
+export default Button;
+export { Button };

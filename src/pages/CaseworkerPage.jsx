@@ -25,6 +25,18 @@ import Button from "../ui/Button";
 import cn from "../lib/cn";
 import { apiFetch, ApiError } from "../lib/api";
 import { useAuth } from "../lib/auth";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/tabs";
+import { Badge } from "../components/ui/badge";
+import { Card, CardContent } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Textarea } from "../components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
 
 // ---------------------------------------------------------------------------
 // Small presentational helpers shared by the console sections.
@@ -139,7 +151,9 @@ function StatusChip({ status }) {
 
 export default function CaseworkerPage() {
   const { user } = useAuth();
-  const workerId = user?.staff_id || user?.user_id || "";
+  const workerId = user?.staff_id || "CW-KHR-01";
+
+  const [activeMobileTab, setActiveMobileTab] = useState("queue");
 
   // ---- Real data (all fetched from the live API) -------------------------
   const [queue, setQueue] = useState(null);
@@ -223,6 +237,7 @@ export default function CaseworkerPage() {
   const openCase = useCallback(
     (pick) => {
       setSelected(pick);
+      setActiveMobileTab("detail");
       setTimeline(null);
       setChosenAction("");
       setActionNote("");
@@ -415,19 +430,33 @@ export default function CaseworkerPage() {
           {/* Live counters — GET /api/dashboard/alerts-summary (never hard-coded) */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
             {counters.map((c) => (
-              <div key={c.label} className="rounded-xl border border-sand-200 bg-white px-4 py-3">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-ink-500">{c.label}</p>
-                <p className={cn("mt-1 font-display text-2xl font-semibold leading-none", c.cls)}>
-                  {c.value ?? "—"}
-                </p>
-              </div>
+              <Card key={c.label} className="border-sand-200 bg-white">
+                <CardContent className="p-3.5 sm:p-4">
+                  <p className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-ink-500">{c.label}</p>
+                  <p className={cn("mt-1.5 font-display text-2xl sm:text-3xl font-semibold leading-none", c.cls)}>
+                    {c.value ?? "—"}
+                  </p>
+                </CardContent>
+              </Card>
             ))}
           </div>
           <p className="mt-2 text-caption text-ink-500">
             All counters and rows below come from the database — no numbers are hard-coded.
           </p>
 
-          <div className="mt-6 grid gap-5 lg:grid-cols-5">
+          {/* Mobile & Tablet Tab Bar */}
+          <div className="mt-6 lg:hidden">
+            <Tabs value={activeMobileTab} onValueChange={setActiveMobileTab} className="w-full">
+              <TabsList className="w-full grid grid-cols-2">
+                <TabsTrigger value="queue">Caseload &amp; Alerts</TabsTrigger>
+                <TabsTrigger value="detail">
+                  {selected ? `Case ${selected.caseId}` : "Case Timeline"}
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+
+          <div className={cn("mt-6 grid gap-5 lg:grid-cols-5", activeMobileTab === "detail" ? "hidden lg:grid" : "grid")}>
             {/* ------------------------------------------------------------------
                 My caseload — GET /api/dashboard/risk-queue (real)
                 ------------------------------------------------------------------ */}
@@ -566,18 +595,21 @@ export default function CaseworkerPage() {
                     </button>
                   ))}
                 </div>
-                <label className="ml-auto flex items-center gap-1.5 text-caption text-ink-500">
-                  Sort
-                  <select
-                    value={sort}
-                    onChange={(e) => setSort(e.target.value)}
-                    className="min-h-[36px] rounded-lg border border-sand-300 bg-white px-2 text-caption text-ink-700 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marigold-600"
-                  >
-                    {SORTS.map(([key, label]) => (
-                      <option key={key} value={key}>{label}</option>
-                    ))}
-                  </select>
-                </label>
+                <div className="ml-auto flex items-center gap-2">
+                  <span className="text-xs text-ink-500 font-medium">Sort:</span>
+                  <Select value={sort} onValueChange={(val) => setSort(val)}>
+                    <SelectTrigger className="h-9 w-[170px] text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {SORTS.map(([key, label]) => (
+                        <SelectItem key={key} value={key} className="text-xs">
+                          {label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
               {alertsError && (
@@ -689,7 +721,19 @@ export default function CaseworkerPage() {
           {/* ------------------------------------------------------------------
               Selected case — timeline + human support action (real endpoints)
               ------------------------------------------------------------------ */}
-          <div ref={detailRef} className="mt-5 scroll-mt-4">
+          <div ref={detailRef} className={cn("mt-5 scroll-mt-4", activeMobileTab === "queue" ? "hidden lg:block" : "block")}>
+            {selected && (
+              <div className="lg:hidden mb-3">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setActiveMobileTab("queue")}
+                  className="text-ink-600 hover:text-ink-900 -ml-2"
+                >
+                  ← Back to caseload &amp; alerts
+                </Button>
+              </div>
+            )}
             {!selected ? (
               <div className="rounded-2xl border border-dashed border-sand-300 bg-white/60 px-6 py-10 text-center">
                 <p className="text-small font-medium text-ink-700">
@@ -697,7 +741,7 @@ export default function CaseworkerPage() {
                 </p>
               </div>
             ) : (
-              <div className="overflow-hidden rounded-2xl border border-sand-200 bg-white">
+              <div className="overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-1">
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-sand-200 bg-sand-50/70 px-5 py-4">
                   <div className="flex flex-wrap items-center gap-3">
                     <h2 className="flex items-center gap-2 text-h4 text-ink-900">
@@ -833,12 +877,12 @@ export default function CaseworkerPage() {
                       <div className="mt-3 space-y-3 rounded-xl border border-sand-200 bg-white p-3">
                         <label className="block">
                           <span className="text-caption font-semibold text-ink-700">Note (caseworker’s own words)</span>
-                          <textarea
+                          <Textarea
                             rows={2}
                             value={actionNote}
                             onChange={(e) => setActionNote(e.target.value)}
                             placeholder="Optional — what was agreed or observed…"
-                            className="mt-1 w-full rounded-lg border border-sand-300 bg-white px-3 py-2 text-small text-ink-800 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marigold-600"
+                            className="mt-1"
                           />
                         </label>
                         <Button size="sm" variant="primary" loading={actionBusy} onClick={recordDecision}>
@@ -858,66 +902,69 @@ export default function CaseworkerPage() {
                     <div className="mt-2 space-y-3 rounded-xl border border-sand-200 bg-white p-3">
                       <label className="block">
                         <span className="text-caption font-semibold text-ink-700">Action taken</span>
-                        <textarea
+                        <Textarea
                           rows={2}
                           value={fup.actionTaken}
                           onChange={(e) => setFup((p) => ({ ...p, actionTaken: e.target.value }))}
                           placeholder="What was done — required"
-                          className="mt-1 w-full rounded-lg border border-sand-300 bg-white px-3 py-2 text-small text-ink-800 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marigold-600"
+                          className="mt-1"
                         />
                       </label>
                       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                         <label className="block">
                           <span className="text-caption font-semibold text-ink-700">Action date</span>
-                          <input
+                          <Input
                             type="date"
                             value={fup.actionDate}
                             onChange={(e) => setFup((p) => ({ ...p, actionDate: e.target.value }))}
-                            className="mt-1 w-full rounded-lg border border-sand-300 bg-white px-2 py-2 text-small text-ink-800 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marigold-600"
+                            className="mt-1"
                           />
                         </label>
                         <label className="block">
                           <span className="text-caption font-semibold text-ink-700">
                             Follow-up date <span className="font-normal text-ink-400">(optional)</span>
                           </span>
-                          <input
+                          <Input
                             type="date"
                             value={fup.followUpDate}
                             onChange={(e) => setFup((p) => ({ ...p, followUpDate: e.target.value }))}
-                            className="mt-1 w-full rounded-lg border border-sand-300 bg-white px-2 py-2 text-small text-ink-800 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marigold-600"
+                            className="mt-1"
                           />
                         </label>
                       </div>
                       <label className="block">
                         <span className="text-caption font-semibold text-ink-700">Status</span>
-                        <select
-                          value={fup.status}
-                          onChange={(e) => setFup((p) => ({ ...p, status: e.target.value }))}
-                          className="mt-1 w-full rounded-lg border border-sand-300 bg-white px-2 py-2 text-small text-ink-800 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marigold-600"
-                        >
-                          {FUP_STATUS.map(([key, label]) => (
-                            <option key={key} value={key}>{label}</option>
-                          ))}
-                        </select>
+                        <Select value={fup.status} onValueChange={(val) => setFup((p) => ({ ...p, status: val }))}>
+                          <SelectTrigger className="mt-1 h-10 text-sm">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {FUP_STATUS.map(([key, label]) => (
+                              <SelectItem key={key} value={key} className="text-sm">
+                                {label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </label>
                       <label className="block">
                         <span className="text-caption font-semibold text-ink-700">Outcome</span>
-                        <textarea
+                        <Textarea
                           rows={2}
                           value={fup.outcome}
                           onChange={(e) => setFup((p) => ({ ...p, outcome: e.target.value }))}
                           placeholder="Optional — how the contact went"
-                          className="mt-1 w-full rounded-lg border border-sand-300 bg-white px-3 py-2 text-small text-ink-800 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marigold-600"
+                          className="mt-1"
                         />
                       </label>
                       <label className="block">
                         <span className="text-caption font-semibold text-ink-700">Notes</span>
-                        <textarea
+                        <Textarea
                           rows={2}
                           value={fup.notes}
                           onChange={(e) => setFup((p) => ({ ...p, notes: e.target.value }))}
                           placeholder="Optional — kept separate from AI explanations"
-                          className="mt-1 w-full rounded-lg border border-sand-300 bg-white px-3 py-2 text-small text-ink-800 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marigold-600"
+                          className="mt-1"
                         />
                       </label>
                       <Button

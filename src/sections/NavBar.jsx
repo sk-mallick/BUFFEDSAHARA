@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { LogIn, LogOut, Menu, Phone, X } from "lucide-react";
+import { LogIn, LogOut, Menu, Phone, Shield } from "lucide-react";
 import ArchMark from "../components/ArchMark";
 import LangSwitcher from "../components/LangSwitcher";
-import ExitButton from "../components/ExitButton";
 import { useLang } from "../lib/i18n";
 import { useAuth, isStaffRole } from "../lib/auth";
 import cn from "../lib/cn";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../components/ui/sheet";
 
 const roleLabel = {
   national_admin: "National admin",
@@ -27,36 +32,42 @@ function AuthControl({ className, mobile = false }) {
   const location = useLocation();
 
   if (status !== "authed" || !user) {
-    // Hide the sign-in link while already on the login page.
     if (location.pathname === "/login") return null;
     return (
       <Link
         to="/login"
         className={cn(
-          "inline-flex items-center gap-1.5 rounded-full border border-sand-300 bg-white/70 py-1.5 pl-3 pr-4 text-small font-medium text-ink-700 transition-colors duration-fast ease-soft hover:border-marigold-300 hover:bg-white hover:text-marigold-800",
-          mobile && "self-start",
+          "inline-flex items-center gap-1.5 h-9 rounded-full bg-marigold-600 px-4 text-xs font-semibold text-white shadow-xs transition-colors duration-fast hover:bg-marigold-700 select-none shrink-0",
+          mobile && "w-full justify-center h-10",
           className
         )}
       >
-        <LogIn size={14} aria-hidden="true" />
-        {t("nav.signIn")}
+        <LogIn size={13} aria-hidden="true" />
+        <span>{t("nav.signIn")}</span>
       </Link>
     );
   }
   return (
-    <button
-      type="button"
-      onClick={logout}
-      className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border border-sand-300 bg-white/70 py-1.5 pl-3 pr-4 text-small font-medium text-ink-700 transition-colors duration-fast ease-soft hover:border-amber-300 hover:bg-white hover:text-amber-800",
-        mobile && "self-start",
-        className
+    <div className={cn("inline-flex items-center gap-2 shrink-0", mobile && "w-full flex-col", className)}>
+      {!mobile && (
+        <span className="hidden xl:inline-flex items-center gap-1.5 rounded-full bg-sand-200/80 px-2.5 h-9 text-[11px] font-medium text-ink-700">
+          <span className="h-1.5 w-1.5 rounded-full bg-sage-600" />
+          {user.name ? user.name.split(" ")[0] : roleLabel[user.role] || user.role}
+        </span>
       )}
-      title={`${t("nav.signOut")} — ${roleLabel[user.role] || user.role}`}
-    >
-      <LogOut size={14} aria-hidden="true" />
-      {t("nav.signOut")}
-    </button>
+      <button
+        type="button"
+        onClick={logout}
+        className={cn(
+          "inline-flex items-center gap-1.5 h-9 rounded-full border border-sand-300/80 bg-white/90 px-3 text-xs font-semibold text-ink-700 shadow-xs transition-colors duration-fast hover:border-red-300 hover:bg-red-50/80 hover:text-red-700 select-none",
+          mobile && "w-full justify-center h-10"
+        )}
+        title={`${t("nav.signOut")} — ${roleLabel[user.role] || user.role}`}
+      >
+        <LogOut size={13} aria-hidden="true" />
+        <span>{t("nav.signOut")}</span>
+      </button>
+    </div>
   );
 }
 
@@ -71,29 +82,40 @@ const navLinks = [
 
 function Wordmark() {
   return (
-    <span className="inline-flex items-center gap-2.5">
-      <ArchMark size={30} className="text-marigold-600" />
-      <span className="font-display text-xl font-semibold tracking-tight text-ink-900">
-        Sahara <span className="text-marigold-600">सहारा</span>
+    <div className="group inline-flex items-center gap-2.5 select-none">
+      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-marigold-500 to-marigold-700 text-white shadow-xs transition-shadow duration-200 group-hover:shadow-sm shrink-0">
+        <ArchMark size={20} strokeWidth={3.5} className="text-white" />
       </span>
-    </span>
+      <span className="flex flex-col text-left">
+        <span className="font-display text-lg font-bold leading-tight tracking-tight text-ink-900 flex items-baseline gap-1">
+          Sahara <span className="text-xs font-semibold text-marigold-700 font-sans">सहारा</span>
+        </span>
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-400 leading-none">
+          Support System
+        </span>
+      </span>
+    </div>
   );
 }
 
-function HelplinePill({ className }) {
+function HelplinePill({ className, showLabel = false }) {
   const { t } = useLang();
   return (
     <a
       href="tel:14566"
       className={cn(
-        "inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 py-1.5 pl-3 pr-4 text-small font-medium text-amber-700 transition-colors duration-fast ease-soft hover:border-amber-300 hover:bg-amber-100",
+        "group inline-flex items-center gap-2 h-9 rounded-full border border-amber-300/80 bg-amber-50/90 px-3 text-xs font-semibold text-amber-900 shadow-xs transition-colors duration-fast hover:border-amber-400 hover:bg-amber-100/90 select-none shrink-0",
         className
       )}
+      aria-label="National Helpline 14566"
     >
-      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-600 text-white">
-        <Phone size={11} aria-hidden="true" />
+      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-600 text-white shadow-xs shrink-0">
+        <Phone size={10} aria-hidden="true" />
       </span>
-      {t("nav.helpline")}
+      <span className={cn("hidden xl:inline", showLabel && "inline")}>{t("nav.helpline")}</span>
+      <span className="font-mono text-[11px] font-bold text-amber-950 bg-amber-200/80 rounded-full px-2 py-0.5 shadow-2xs">
+        14566
+      </span>
     </a>
   );
 }
@@ -104,7 +126,6 @@ export default function NavBar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const location = useLocation();
-  const reduce = useReducedMotion();
 
   // Conditional nav links for logged-in users
   const loggedinLinks = (() => {
@@ -116,62 +137,58 @@ export default function NavBar() {
       ];
     }
     if (isStaffRole(user.role)) {
-      const dashLink = user.role === "caseworker"
-        ? "/caseworker"
-        : "/command";
+      const dashLink = user.role === "caseworker" ? "/caseworker" : "/command";
       return [{ to: dashLink, labelKey: "nav.dashboard" }];
     }
     return [];
   })();
 
-  // Over the cinematic hero (home, top of page) the transparent nav sits on a
-  // bright sky — inactive links need full ink + a soft halo to stay legible.
   const overHero = !scrolled && !open && location.pathname === "/";
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 15);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close the mobile menu on navigation; lock body scroll while open.
-  useEffect(() => setOpen(false), [location.pathname]);
+  // Close the mobile menu on route change
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
+    setOpen(false);
+  }, [location.pathname]);
 
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-nav transition-all duration-base ease-soft",
+        "fixed inset-x-0 top-0 z-nav transition-all duration-300",
         scrolled || open
-          ? "border-b border-sand-200 bg-sand-50/95 shadow-1 backdrop-blur-md"
+          ? "border-b border-sand-200/80 bg-sand-50/90 shadow-[0_4px_20px_rgba(0,0,0,0.04)] backdrop-blur-xl"
           : overHero
-            ? "border-b border-transparent bg-[linear-gradient(to_bottom,rgba(250,246,238,0.66),rgba(250,246,238,0.34)_58%,transparent)] backdrop-blur-[7px]"
-            : "border-b border-transparent bg-transparent"
+            ? "border-b border-sand-200/40 bg-sand-50/60 shadow-xs backdrop-blur-lg"
+            : "border-b border-sand-200/50 bg-sand-50/80 backdrop-blur-md"
       )}
     >
       <div className="shell">
-        <div className="flex h-16 items-center justify-between gap-4 md:h-20">
+        <div className="flex h-16 md:h-[72px] items-center justify-between gap-3 lg:gap-4">
           <Link to="/" aria-label="Sahara — home" className="shrink-0">
             <Wordmark />
           </Link>
 
-          <nav aria-label="Primary" className="hidden items-center gap-6 lg:flex">
+          {/* Desktop Nav: Encapsulated Floating Island Pill */}
+          <nav
+            aria-label="Primary"
+            className="hidden lg:flex items-center gap-0.5 rounded-full border border-sand-300/70 bg-white/85 p-1 shadow-xs backdrop-blur-md"
+          >
             {loggedinLinks.map((link) => (
               <NavLink
                 key={link.to}
                 to={link.to}
                 className={({ isActive }) =>
                   cn(
-                    "relative py-2 text-small font-medium transition-colors duration-fast ease-soft after:absolute after:-bottom-0.5 after:left-0 after:h-0.5 after:rounded-full after:bg-marigold-600 after:transition-all after:duration-fast after:ease-soft",
+                    "inline-flex items-center justify-center h-8 px-3 rounded-full text-xs font-semibold transition-all duration-fast leading-none select-none",
                     isActive
-                      ? "text-marigold-700 font-semibold after:w-full"
-                      : "text-ink-500 hover:text-ink-900 after:w-0 hover:after:w-full"
+                      ? "bg-marigold-600 text-white shadow-xs"
+                      : "text-marigold-800 bg-marigold-50 hover:bg-marigold-100"
                   )
                 }
               >
@@ -185,15 +202,10 @@ export default function NavBar() {
                 end={link.end}
                 className={({ isActive }) =>
                   cn(
-                    "relative py-2 text-small font-medium transition-colors duration-fast ease-soft after:absolute after:-bottom-0.5 after:left-0 after:h-0.5 after:rounded-full after:bg-marigold-600 after:transition-all after:duration-fast after:ease-soft",
+                    "inline-flex items-center justify-center h-8 px-3 rounded-full text-xs font-medium transition-all duration-fast leading-none select-none",
                     isActive
-                      ? "text-ink-900 after:w-full"
-                      : cn(
-                          overHero
-                            ? "text-ink-900 [text-shadow:0_1px_12px_rgba(255,241,219,0.55),0_0_2px_rgba(255,241,219,0.6)]"
-                            : "text-ink-500",
-                          "hover:text-ink-900 after:w-0 hover:after:w-full"
-                        )
+                      ? "bg-ink-900 text-white font-semibold shadow-xs"
+                      : "text-ink-700 hover:text-ink-950 hover:bg-sand-200/50"
                   )
                 }
               >
@@ -202,102 +214,104 @@ export default function NavBar() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2.5">
+          {/* Action Bar */}
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
             <HelplinePill className="hidden md:inline-flex" />
             <AuthControl className="hidden lg:inline-flex" />
-            <LangSwitcher className="hidden lg:inline-flex" />
-            <ExitButton />
-            <button
-              type="button"
-              onClick={() => setOpen(!open)}
-              aria-expanded={open}
-              aria-controls="mobile-menu"
-              aria-label={open ? "Close menu" : "Open menu"}
-              className="flex h-11 w-11 items-center justify-center rounded-md text-ink-900 transition-colors duration-fast ease-soft hover:bg-sand-100 lg:hidden"
-            >
-              {open ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
-            </button>
-          </div>
-        </div>
-      </div>
+            <LangSwitcher className="hidden sm:inline-flex" />
 
-      {/* Full-screen mobile menu */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            id="mobile-menu"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: reduce ? 0 : 0.24, ease: [0.45, 0, 0.25, 1] }}
-            className="fixed inset-0 top-16 z-drawer flex flex-col overflow-y-auto bg-sand-50 md:top-20 lg:hidden"
-          >
-            <nav aria-label="Mobile" className="shell flex flex-1 flex-col py-8">
-              {loggedinLinks.length > 0 && (
-                <ul className="mb-4 space-y-1">
-                  {loggedinLinks.map((link, i) => (
-                    <motion.li
-                      key={link.to}
-                      initial={reduce ? false : { opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1], delay: i * 0.05 }}
-                    >
+            {/* Mobile / Tablet Sheet Trigger */}
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger asChild>
+                <button
+                  type="button"
+                  aria-label={open ? "Close navigation menu" : "Open navigation menu"}
+                  className="flex h-10 w-10 items-center justify-center rounded-md border border-sand-300 bg-white/70 text-ink-900 transition-colors duration-fast ease-soft hover:bg-sand-100 lg:hidden shadow-sm"
+                >
+                  <Menu size={20} aria-hidden="true" />
+                </button>
+              </SheetTrigger>
+              <SheetContent side="right" className="flex flex-col justify-between overflow-y-auto w-full sm:w-[380px]">
+                <div>
+                  <SheetHeader className="pb-6 border-b border-sand-200">
+                    <SheetTitle>
+                      <Wordmark />
+                    </SheetTitle>
+                    {user && (
+                      <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-sand-200 bg-sand-100 px-3 py-1 text-xs text-ink-700">
+                        <Shield size={12} className="text-marigold-600" />
+                        <span>Signed in as <strong className="font-semibold">{roleLabel[user.role] || user.role}</strong></span>
+                      </div>
+                    )}
+                  </SheetHeader>
+
+                  <nav aria-label="Mobile Navigation" className="mt-6 flex flex-col space-y-1">
+                    {loggedinLinks.length > 0 && (
+                      <div className="mb-4 pb-3 border-b border-sand-200">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-marigold-600 px-3">
+                          Active Workspace
+                        </span>
+                        <div className="mt-2 space-y-1">
+                          {loggedinLinks.map((link) => (
+                            <NavLink
+                              key={link.to}
+                              to={link.to}
+                              onClick={() => setOpen(false)}
+                              className={({ isActive }) =>
+                                cn(
+                                  "flex items-center justify-between rounded-lg px-3 py-2.5 text-base font-medium transition-colors",
+                                  isActive
+                                    ? "bg-marigold-50 text-marigold-800 font-semibold"
+                                    : "text-ink-900 hover:bg-sand-100"
+                                )
+                              }
+                            >
+                              {t(link.labelKey)}
+                            </NavLink>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <span className="text-xs font-semibold uppercase tracking-wider text-ink-500 px-3 pb-1">
+                      Menu
+                    </span>
+                    {navLinks.map((link) => (
                       <NavLink
+                        key={link.to}
                         to={link.to}
+                        end={link.end}
+                        onClick={() => setOpen(false)}
                         className={({ isActive }) =>
                           cn(
-                            "block border-b border-sand-200 py-4 font-display text-3xl font-medium transition-colors duration-fast ease-soft",
-                            isActive ? "text-marigold-600" : "text-ink-900"
+                            "flex items-center justify-between rounded-lg px-3 py-2.5 text-base font-medium transition-colors",
+                            isActive
+                              ? "bg-sand-100 text-marigold-700 font-semibold"
+                              : "text-ink-700 hover:bg-sand-100 hover:text-ink-900"
                           )
                         }
                       >
                         {t(link.labelKey)}
                       </NavLink>
-                    </motion.li>
-                  ))}
-                </ul>
-              )}
-              <ul className="space-y-1">
-                {navLinks.map((link, i) => (
-                  <motion.li
-                    key={link.to}
-                    initial={reduce ? false : { opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1], delay: i * 0.05 }}
-                  >
-                    <NavLink
-                      to={link.to}
-                      end={link.end}
-                      className={({ isActive }) =>
-                        cn(
-                          "block border-b border-sand-200 py-4 font-display text-3xl font-medium transition-colors duration-fast ease-soft",
-                          isActive ? "text-marigold-600" : "text-ink-900"
-                        )
-                      }
-                    >
-                      {t(link.labelKey)}
-                    </NavLink>
-                  </motion.li>
-                ))}
-              </ul>
-
-              <motion.div
-                initial={reduce ? false : { opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.36, delay: 0.3 }}
-                className="mt-auto flex flex-col gap-5 pb-4 pt-10"
-              >
-                <HelplinePill className="self-start" />
-                <AuthControl mobile />
-                <div className="flex items-center justify-between gap-4">
-                  <LangSwitcher />
-                  <ExitButton />
+                    ))}
+                  </nav>
                 </div>
-              </motion.div>
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
+                <div className="mt-8 space-y-4 border-t border-sand-200 pt-6">
+                  <div className="flex flex-col gap-2.5">
+                    <HelplinePill showLabel className="w-full justify-center h-10" />
+                    <AuthControl mobile />
+                  </div>
+                  <div className="flex items-center justify-between pt-2">
+                    <LangSwitcher />
+                    <span className="text-xs text-ink-500">SIH 2026 · MSJE</span>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </div>
+      </div>
     </header>
   );
 }

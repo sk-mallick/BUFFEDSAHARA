@@ -10,7 +10,10 @@ import {
   ShieldCheck,
   Trash2,
   User,
+  Video,
 } from "lucide-react";
+import VoiceInputControl from "../components/media/VoiceInputControl";
+import VideoPreviewModal from "../components/media/VideoPreviewModal";
 import PageHeader from "../components/PageHeader";
 import { useAuth } from "../lib/auth";
 import { apiFetch, ApiError } from "../lib/api";
@@ -137,6 +140,7 @@ export default function TalkPage() {
   const [crisis, setCrisis] = useState(null); // crisis card payload or null
   const [support, setSupport] = useState(null); // {requested, at}
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
   const [notice, setNotice] = useState("");
   const [checkinStage, setCheckinStage] = useState(null); // index into CHECKIN_STAGES
   const [error, setError] = useState("");
@@ -426,15 +430,27 @@ export default function TalkPage() {
                   </p>
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={() => setConfirmDelete(true)}
-                className="inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-small font-medium text-ink-500 transition-colors duration-fast hover:bg-sand-100 hover:text-ink-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marigold-600"
-              >
-                <Trash2 size={15} aria-hidden="true" />
-                <span className="hidden sm:inline">{say("deleteLabel")}</span>
-                <span className="sr-only sm:hidden">{say("deleteLabel")}</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowVideo(true)}
+                  title="Check video and camera preview"
+                  aria-label="Check video and camera preview"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-sand-300 bg-white px-3 py-1.5 text-xs font-semibold text-ink-700 transition hover:bg-sand-100 hover:text-ink-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-marigold-600"
+                >
+                  <Video size={14} className="text-sage-700" aria-hidden="true" />
+                  <span className="hidden sm:inline">Video Check</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmDelete(true)}
+                  className="inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-small font-medium text-ink-500 transition-colors duration-fast hover:bg-sand-100 hover:text-ink-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marigold-600"
+                >
+                  <Trash2 size={15} aria-hidden="true" />
+                  <span className="hidden sm:inline">{say("deleteLabel")}</span>
+                  <span className="sr-only sm:hidden">{say("deleteLabel")}</span>
+                </button>
+              </div>
             </div>
 
             {demoMode && state.status === "ready" && (
@@ -564,6 +580,14 @@ export default function TalkPage() {
                 disabled={state.status !== "ready"}
                 className="min-h-[44px] w-full rounded-md border border-sand-300 bg-white px-3.5 py-2.5 text-[0.9375rem] text-ink-900 placeholder:text-ink-400 focus:border-marigold-500 focus:outline-none focus:ring-2 focus:ring-marigold-500/30 disabled:opacity-60"
               />
+              <VoiceInputControl
+                lang={lang}
+                onTranscript={(spokenText) => {
+                  setDraft((prev) => (prev ? `${prev} ${spokenText}` : spokenText));
+                  inputRef.current?.focus();
+                }}
+                disabled={state.status !== "ready"}
+              />
               <button
                 type="submit"
                 disabled={!draft.trim() || typing || state.status !== "ready"}
@@ -625,6 +649,13 @@ export default function TalkPage() {
               </div>
             </div>
           )}
+
+          {/* Video check-in & device preview modal */}
+          <VideoPreviewModal
+            isOpen={showVideo}
+            onClose={() => setShowVideo(false)}
+            title="Video Consultation & Device Check"
+          />
         </div>
       </section>
     </>

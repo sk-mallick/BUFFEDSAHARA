@@ -45,8 +45,13 @@ export default function CalmSounds({ lang = "en" }) {
   const [error, setError] = useState("");
   const ctxRef = useRef(null);
   const nodesRef = useRef([]);
+  const canvasRef = useRef(null);
+  const analyserRef = useRef(null);
+  const animFrameRef = useRef(null);
 
   const teardown = () => {
+    if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    animFrameRef.current = null;
     nodesRef.current.forEach((n) => {
       try { n.stop?.(); } catch { /* already stopped */ }
       try { n.disconnect?.(); } catch { /* already disconnected */ }
@@ -54,9 +59,53 @@ export default function CalmSounds({ lang = "en" }) {
     nodesRef.current = [];
     try { ctxRef.current?.close(); } catch { /* already closed */ }
     ctxRef.current = null;
+    analyserRef.current = null;
   };
 
   useEffect(() => teardown, []);
+
+  // Waveform render loop
+  useEffect(() => {
+    if (!playing || !analyserRef.current || !canvasRef.current) return;
+    const canvas = canvasRef.current;
+    const ctx2d = canvas.getContext("2d");
+    const analyser = analyserRef.current;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    const draw = () => {
+      animFrameRef.current = requestAnimationFrame(draw);
+      analyser.getByteFrequencyData(dataArray);
+
+      ctx2d.clearRect(0, 0, canvas.width, canvas.height);
+      const barCount = 32;
+      const barWidth = (canvas.width / barCount) - 2;
+      let x = 1;
+
+      for (let i = 0; i < barCount; i++) {
+        // Sample frequency band with gentle dampening for smooth aesthetic
+        const index = Math.min(Math.floor((i / barCount) * bufferLength), bufferLength - 1);
+        const val = dataArray[index] || 0;
+        const barHeight = Math.max(3, (val / 255) * (canvas.height - 4));
+
+        // Warm Sage gradient
+        const alpha = Math.min(1, Math.max(0.35, val / 255));
+        ctx2d.fillStyle = i % 2 === 0 ? `rgba(45, 106, 79, ${alpha})` : `rgba(158, 74, 38, ${alpha * 0.8})`;
+
+        const y = canvas.height - barHeight;
+        ctx2d.beginPath();
+        ctx2d.roundRect(x, y, barWidth, barHeight, 2);
+        ctx2d.fill();
+
+        x += barWidth + 2;
+      }
+    };
+
+    draw();
+    return () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    };
+  }, [playing]);
 
   const stop = () => { teardown(); setPlaying(null); };
 
@@ -69,7 +118,13 @@ export default function CalmSounds({ lang = "en" }) {
       const gain = ctx.createGain();
       gain.gain.value = volume;
       gain.connect(ctx.destination);
-      nodesRef.current.push(gain);
+
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 64;
+      gain.connect(analyser);
+      analyserRef.current = analyser;
+
+      nodesRef.current.push(gain, analyser);
 
       if (id === "rain") {
         const src = ctx.createBufferSource();
@@ -157,26 +212,54 @@ export default function CalmSounds({ lang = "en" }) {
       </div>
 
       {playing && (
-        <div className="mt-4 flex items-center gap-3 rounded-xl bg-sand-100 px-4 py-3">
-          <Volume2 size={16} className="shrink-0 text-ink-600" aria-hidden="true" />
-          <label className="sr-only" htmlFor="calm-vol">{t.volume}</label>
-          <input
-            id="calm-vol"
-            type="range"
-            min="0"
-            max="1"
-            step="0.05"
-            value={volume}
-            onChange={(e) => changeVolume(Number(e.target.value))}
-            className="h-1.5 w-full accent-sage-700"
-          />
-          <button
-            type="button"
-            onClick={stop}
-            className="shrink-0 rounded-full border border-sand-300 bg-white px-3 py-1 text-caption font-medium text-ink-700 hover:border-ink-400"
-          >
-            {t.stop}
-          </button>
+        <div className="mt-4 space-y-3 rounded-2xl border border-sage-200 bg-sage-50/80 p-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sage-400 opacity-75" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-sage-600" />
+              </span>
+              <span className="text-small font-medium text-ink-900 capitalize">
+                Playing {SOUNDS.find((s) => s.id === playing)?.id || "soundscape"}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={stop}
+              className="rounded-full border border-sand-300 bg-white px-3.5 py-1 text-caption font-medium text-ink-700 transition hover:bg-sand-100 hover:text-ink-900"
+            >
+              {t.stop}
+            </button>
+          </div>
+
+          {/* Real-time frequency waveform */}
+          <div className="overflow-hidden rounded-lg bg-white/70 p-2 shadow-inner">
+            <canvas
+              ref={canvasRef}
+              width={280}
+              height={36}
+              className="h-9 w-full rounded"
+              aria-label="Audio frequency visualization"
+            />
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Volume2 size={16} className="shrink-0 text-ink-600" aria-hidden="true" />
+            <label className="sr-only" htmlFor="calm-vol">{t.volume}</label>
+            <input
+              id="calm-vol"
+              type="range"
+              min="0"
+              max="1"
+              step="0.05"
+              value={volume}
+              onChange={(e) => changeVolume(Number(e.target.value))}
+              className="h-1.5 w-full accent-sage-700"
+            />
+            <span className="text-caption font-mono text-ink-500 w-9 text-right">
+              {Math.round(volume * 100)}%
+            </span>
+          </div>
         </div>
       )}
       {error && (

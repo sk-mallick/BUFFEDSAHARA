@@ -9,8 +9,8 @@ import cn from "../lib/cn";
 
 const inputCls = (invalid) =>
   cn(
-    "w-full rounded-md border bg-white px-3.5 py-3 text-small text-ink-900 placeholder:text-ink-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marigold-600 transition-colors duration-fast ease-soft",
-    invalid ? "border-amber-600" : "border-sand-300"
+    "w-full rounded-lg border bg-white px-3.5 py-2.5 text-small text-ink-900 placeholder:text-ink-400 outline-none transition-colors duration-fast focus:border-marigold-600 focus:ring-2 focus:ring-marigold-200",
+    invalid ? "border-critical-500 focus:border-critical-600 focus:ring-critical-100" : "border-sand-300"
   );
 
 const topics = [
